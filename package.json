@@ -1,0 +1,23 @@
+{
+  "name": "homebridge-verisure",
+  "version": "1.0.0",
+  "description": "Verisure plugin for homebridge: https://github.com/nfarina/homebridge",
+  "license": "MIT",
+  "keywords": [
+    "homebridge-plugin"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ptz0n/homebridge-verisure.git"
+  },
+  "bugs": {
+    "url": "http://github.com/ptz0n/homebridge-verisure/issues"
+  },
+  "engines": {
+    "node": ">=0.12.0",
+    "homebridge": ">=0.2.0"
+  },
+  "dependencies": {
+    "verisure": "^1.1.0"
+  }
+}
