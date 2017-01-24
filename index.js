@@ -72,7 +72,7 @@ const VerisurePlatform = function(log, config, api) {
         if(err) return log(err);
         var devices = overview.climateValues.map(function(device) {
           return new VerisureAccessory(log, {
-            name: `${DEVICE_TYPES[device.deviceType]} (${device.deviceArea})`,
+            name: `${DEVICE_TYPES[device.deviceType] || device.deviceType} (${device.deviceArea})`,
             model: device.deviceType,
             serialNumber: device.deviceLabel,
             value: 0
