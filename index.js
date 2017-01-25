@@ -8,14 +8,16 @@ const PLATFORM_NAME = 'verisure';
 const MANUFACTURER = 'Verisure';
 
 const DEVICE_TYPES = {
-  'VOICEBOX1': 'Directenhet',
+  'SIREN1': 'Siren',
+  'SMARTPLUG': 'Smart plug',
   'SMOKE2': 'Rökdetektor',
-  'SMARTPLUG': 'Smart plug'
+  'VOICEBOX1': 'Directenhet'
 }
 
 let VERISURE_TOKEN = null;
 let VERISURE_INSTALLATION = null;
 let VERISURE_CALLS = {};
+let VERISURE_DEVICE_NAMES = []
 
 
 const getVerisureInstallation = function(config, callback) {
@@ -47,6 +49,17 @@ const getOverview = function(callback) {
   });
 }
 
+const getUniqueName = function(name) {
+  if(VERISURE_DEVICE_NAMES.includes(name)) {
+    const match = name.match(/(.+) #(\d+)/) || [null, name, 1]
+    return getUniqueName(`${match[1]} #${parseInt(match[2])+1}`);
+  }
+  else {
+    VERISURE_DEVICE_NAMES.push(name)
+    return name;
+  }
+}
+
 
 module.exports = function(homebridge) {
   Accessory = homebridge.platformAccessory;
@@ -66,13 +79,14 @@ const VerisurePlatform = function(log, config, api) {
 
   this.accessories = function(callback) {
     getVerisureInstallation(config, function(err) {
-      if(err) return log(err);
+      if(err) return log.error(err);
 
       verisure.overview(VERISURE_TOKEN, VERISURE_INSTALLATION, function(err, overview) {
-        if(err) return log(err);
+        if(err) return log.error(err);
         var devices = overview.climateValues.map(function(device) {
+          const deviceName = DEVICE_TYPES[device.deviceType] || device.deviceType
           return new VerisureAccessory(log, {
-            name: `${DEVICE_TYPES[device.deviceType] || device.deviceType} (${device.deviceArea})`,
+            name: getUniqueName(`${deviceName} (${device.deviceArea})`),
             model: device.deviceType,
             serialNumber: device.deviceLabel,
             value: 0
@@ -81,7 +95,7 @@ const VerisurePlatform = function(log, config, api) {
 
         devices = devices.concat(overview.smartPlugs.map(function(device) {
           return new VerisureAccessory(log, {
-            name: `${DEVICE_TYPES.SMARTPLUG} (${device.area})`,
+            name: getUniqueName(`${DEVICE_TYPES.SMARTPLUG} (${device.area})`),
             model: 'SMARTPLUG',
             serialNumber: device.deviceLabel,
             value: device.currentState == 'ON' ? 1 : 0
@@ -164,7 +178,7 @@ VerisureAccessory.prototype = {
 
     var service = null;
 
-    if(this.model == 'SMARTPLUG') {
+    if(['SMARTPLUG'].includes(this.model)) {
       service = new Service.Switch(this.name);
       service
         .getCharacteristic(Characteristic.On)
@@ -173,11 +187,15 @@ VerisureAccessory.prototype = {
         .value = this.value;
     }
 
-    if(['VOICEBOX1', 'SMOKE2'].includes(this.model)) {
+    if(['SIREN1', 'SMOKE2', 'VOICEBOX1'].includes(this.model)) {
       service = new Service.TemperatureSensor(this.name);
       service
         .getCharacteristic(Characteristic.CurrentTemperature)
         .on('get', this._getCurrentTemperature.bind(this));
+    }
+
+    if(!service) {
+      this.log.error(`Device ${this.model} is not yet supported`);
     }
 
     return [accessoryInformation, service]
