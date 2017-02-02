@@ -3,6 +3,7 @@
 This is a plugin for [homebridge](https://github.com/nfarina/homebridge). It's a
 working implementation for several Verisure devices:
 
+- [x] __HUMIDITY1__ - Temperature
 - [x] __SIREN1__ - Temperature
 - [x] __SMARTPLUG__ - State, on, off
 - [x] __SMOKE2__ - Temperature

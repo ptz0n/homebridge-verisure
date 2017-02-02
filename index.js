@@ -13,6 +13,7 @@ const PLATFORM_NAME = 'verisure';
 const MANUFACTURER = 'Verisure';
 
 const DEVICE_TYPES = {
+  'HUMIDITY1': 'Klimatdetektor',
   'SIREN1': 'Siren',
   'SMARTPLUG': 'Smart plug',
   'SMOKE2': 'Rökdetektor',
@@ -192,7 +193,7 @@ VerisureAccessory.prototype = {
         .value = this.value;
     }
 
-    if(['SIREN1', 'SMOKE2', 'VOICEBOX1'].includes(this.model)) {
+    if(['HUMIDITY1', 'SIREN1', 'SMOKE2', 'VOICEBOX1'].includes(this.model)) {
       service = new Service.TemperatureSensor(this.name);
       service
         .getCharacteristic(Characteristic.CurrentTemperature)
