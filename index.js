@@ -1,7 +1,12 @@
-const verisure = require('verisure')
+'use strict';
+
+const verisure = require('verisure');
 
 
-var Accessory, Service, Characteristic, UUIDGen;
+let Accessory,
+    Service,
+    Characteristic,
+    UUIDGen;
 
 const PLUGIN_NAME = 'homebridge-verisure';
 const PLATFORM_NAME = 'verisure';
@@ -73,7 +78,7 @@ module.exports = function(homebridge) {
 
 
 const VerisurePlatform = function(log, config, api) {
-  var platform = this;
+  const platform = this;
   this.log = log;
   this.config = config;
 
@@ -83,7 +88,7 @@ const VerisurePlatform = function(log, config, api) {
 
       verisure.overview(VERISURE_TOKEN, VERISURE_INSTALLATION, function(err, overview) {
         if(err) return log.error(err);
-        var devices = overview.climateValues.map(function(device) {
+        let devices = overview.climateValues.map(function(device) {
           const deviceName = DEVICE_TYPES[device.deviceType] || device.deviceType
           return new VerisureAccessory(log, {
             name: getUniqueName(`${deviceName} (${device.deviceArea})`),
@@ -123,7 +128,7 @@ const VerisureAccessory = function(log, config) {
 VerisureAccessory.prototype = {
   _getCurrentTemperature: function(callback) {
     this.log(`${this.name} (${this.serialNumber}): Getting current temperature...`);
-    var that = this;
+    const that = this;
 
     getOverview(function(err, overview) {
       if(err) return callback(err);
@@ -137,7 +142,7 @@ VerisureAccessory.prototype = {
 
   _getSwitchValue: function(callback) {
     this.log(`${this.name} (${this.serialNumber}): Getting current value...`);
-    var that = this;
+    const that = this;
 
     getOverview(function(err, overview) {
       if(err) return callback(err);
@@ -170,13 +175,13 @@ VerisureAccessory.prototype = {
   },
 
   getServices: function() {
-    var accessoryInformation = new Service.AccessoryInformation();
+    const accessoryInformation = new Service.AccessoryInformation();
     accessoryInformation
       .setCharacteristic(Characteristic.Manufacturer, MANUFACTURER)
       .setCharacteristic(Characteristic.Model, this.model)
       .setCharacteristic(Characteristic.SerialNumber, this.serialNumber)
 
-    var service = null;
+    let service = null;
 
     if(['SMARTPLUG'].includes(this.model)) {
       service = new Service.Switch(this.name);
