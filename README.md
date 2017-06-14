@@ -3,6 +3,7 @@
 This is a plugin for [homebridge](https://github.com/nfarina/homebridge). It's a
 working implementation for several Verisure devices:
 
+- [x] __DOORLOCK__ - Yale Doorman Lock/Unlock
 - [x] __HUMIDITY1__ - Temperature
 - [x] __SIREN1__ - Temperature
 - [x] __SMARTPLUG__ - State, on, off
@@ -29,7 +30,8 @@ your array (list) of enabled platform plugins.
     "platform" : "verisure",
     "name" : "Verisure",
     "email": "your@email.com",
-    "password": "yourT0p5ecre7Passw0rd"
+    "password": "yourT0p5ecre7Passw0rd",
+    "doorcode": "000000"
   }
 ]
 ```
