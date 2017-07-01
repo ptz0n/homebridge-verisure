@@ -25,11 +25,10 @@ let VERISURE_TOKEN = null;
 let VERISURE_INSTALLATION = null;
 let VERISURE_CALLS = {};
 let VERISURE_DEVICE_NAMES = []
-let VERISURE_DOORLOCK_CODE = null;
 
 
 const getVerisureInstallation = function(config, callback) {
-  if (config && config.doorcode) VERISURE_DOORLOCK_CODE = config.doorcode;
+  
   verisure.auth(config.email, config.password, function(err, token) {
     if(err) return callback(err);
     VERISURE_TOKEN = token;
@@ -260,7 +259,7 @@ VerisureAccessory.prototype = {
       },
       json: 
       {
-          "code": VERISURE_DOORLOCK_CODE
+          "code": this.config.doorcode
       }
     }, function(value, callback, error, response){
       this.log(`***** Response from ${actionValue}-operation: ${JSON.stringify(response)}`);
