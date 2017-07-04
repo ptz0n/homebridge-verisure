@@ -116,6 +116,7 @@ const VerisurePlatform = function(log, config, api) {
                  model: 'DOORLOCK',
                  serialNumber: device.deviceLabel,
                  value: device.lockedState==='LOCKED' ? 1 : 0,
+                 doorcode: config.doorcode,
                  category: 6 // Hardcoded from Accessory.Categories in Accessory.js of hap-nodejs
               });
            });
