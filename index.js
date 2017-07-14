@@ -265,8 +265,11 @@ VerisureAccessory.prototype = {
     }, function(value, callback, error, response){
       this.log(`***** Response from ${actionValue}-operation: ${JSON.stringify(response)}`);
       if (error != null) callback(error, response);
-      if (response && response.statusCode != 200) callback(response);
-      this._waitForLockStatusChangeResult(value, callback, response);
+      if (response && response.statusCode != 200) {
+        callback(response);
+      } else {
+        this._waitForLockStatusChangeResult(value, callback, response);
+      }
     }.bind(this,value,callback))
   },
 
