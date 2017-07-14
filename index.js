@@ -266,7 +266,13 @@ VerisureAccessory.prototype = {
       this.log(`***** Response from ${actionValue}-operation: ${JSON.stringify(response)}`);
       if (error != null) callback(error, response);
       if (response && response.statusCode != 200) {
-        callback(response);
+        if (response.statusCode == 400 && response.body && response.body.errorCode == "VAL_00819"){
+          this.service.setCharacteristic(Characteristic.LockCurrentState, value)
+          this.value = value;
+          callback (null);
+        } else {
+          callback(response);
+        }
       } else {
         this._waitForLockStatusChangeResult(value, callback, response);
       }
