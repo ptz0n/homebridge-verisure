@@ -6,6 +6,7 @@ working implementation for several Verisure devices:
 - [x] __DOORLOCK__ - Yale Doorman Lock/Unlock
 - [x] __HUMIDITY1__ - Temperature
 - [x] __SIREN1__ - Temperature
+- [x] __SMARTCAMERA1__ - Temperature
 - [x] __SMARTPLUG__ - State, on, off
 - [x] __SMOKE2__ - Temperature
 - [x] __VOICEBOX1__ - Temperature
