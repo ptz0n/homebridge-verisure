@@ -23,43 +23,47 @@ const DEVICE_TYPES = {
 }
 
 let VERISURE_TOKEN = null;
-let VERISURE_INSTALLATION = null;
 let VERISURE_CALLS = {};
 let VERISURE_DEVICE_NAMES = []
 
 
-const getVerisureInstallation = function(config, callback) {
+const getVerisureInstallations = function(config) {
+  return new Promise(function(resolve, reject) {
+    verisure.auth(config.email, config.password, function(err, token) {
+      if (err) return reject(err);
+      VERISURE_TOKEN = token;
   
-  verisure.auth(config.email, config.password, function(err, token) {
-    if(err) return callback(err);
-    VERISURE_TOKEN = token;
-
-    verisure.installations(token, config.email, function(err, installations) {
-      if(err) return callback(err);
-      VERISURE_INSTALLATION = installations[0];
-      callback();
+      verisure.installations(token, config.email, function(err, installations) {
+        if (err) return reject(err);
+        resolve(installations)
+      });
     });
-  });
+  })
 }
 
-const getOverview = function(callback) {
-  if(typeof VERISURE_CALLS.overview == 'undefined') {
-    VERISURE_CALLS.overview = [];
+const getOverview = function(installation, callback) {
+  let giid = installation.giid
+  if (!VERISURE_CALLS.overview) {
+    VERISURE_CALLS.overview = {};
   }
-  VERISURE_CALLS.overview.push(callback);
-  if(VERISURE_CALLS.overview.length > 1) {
+  if (!VERISURE_CALLS.overview[giid]) {
+    VERISURE_CALLS.overview[giid] = [];
+  }
+
+  VERISURE_CALLS.overview[giid].push(callback);
+  if (VERISURE_CALLS.overview[giid].length > 1) {
     return;
   }
-  verisure.overview(VERISURE_TOKEN, VERISURE_INSTALLATION, function(err, overview) {
-    VERISURE_CALLS.overview.map(function(callback) {
+  verisure.overview(VERISURE_TOKEN, installation, function(err, overview) {
+    VERISURE_CALLS.overview[giid].map(function(callback) {
       callback(err, overview);
     });
-    VERISURE_CALLS.overview = [];
+    VERISURE_CALLS.overview[giid] = [];
   });
 }
 
 const getUniqueName = function(name) {
-  if(VERISURE_DEVICE_NAMES.includes(name)) {
+  if (VERISURE_DEVICE_NAMES.includes(name)) {
     const match = name.match(/(.+) #(\d+)/) || [null, name, 1]
     return getUniqueName(`${match[1]} #${parseInt(match[2])+1}`);
   }
@@ -86,46 +90,60 @@ const VerisurePlatform = function(log, config, api) {
   this.log = log;
   this.config = config;
   this.accessories = function(callback) {
-    getVerisureInstallation(config, function(err) {
-      if(err) return log.error(err);
-
-      verisure.overview(VERISURE_TOKEN, VERISURE_INSTALLATION, function(err, overview) {
-        if(err) return log.error(err);
-        let devices = overview.climateValues.map(function(device) {
-          const deviceName = DEVICE_TYPES[device.deviceType] || device.deviceType
-          return new VerisureAccessory(log, {
-            name: getUniqueName(`${deviceName} (${device.deviceArea})`),
-            model: device.deviceType,
-            serialNumber: device.deviceLabel,
-            value: 0
-          });
-        });
-
-        devices = devices.concat(overview.smartPlugs.map(function(device) {
-          return new VerisureAccessory(log, {
-            name: getUniqueName(`${DEVICE_TYPES.SMARTPLUG} (${device.area})`),
-            model: 'SMARTPLUG',
-            serialNumber: device.deviceLabel,
-            value: device.currentState == 'ON' ? 1 : 0
-          });
-        }));
-
-        if (overview && overview.doorLockStatusList){
-           let locks = overview.doorLockStatusList.map(function(device){
+    getVerisureInstallations(config).then(function(installations) {
+      let promises = installations.map(function(installation) {
+        return new Promise(function(resolve, reject) {
+          verisure.overview(VERISURE_TOKEN, installation, function(err, overview) {
+            let devices = []
+            if (err) return reject(err);
+            
+            devices = devices.concat(overview.climateValues.map(function(device) {
+              const deviceName = DEVICE_TYPES[device.deviceType] || device.deviceType
               return new VerisureAccessory(log, {
-                 name: getUniqueName(`${device.area}`),
-                 model: 'DOORLOCK',
-                 serialNumber: device.deviceLabel,
-                 value: device.lockedState==='LOCKED' ? 1 : 0,
-                 doorcode: config.doorcode,
-                 category: 6 // Hardcoded from Accessory.Categories in Accessory.js of hap-nodejs
+                installation: installation,
+                name: getUniqueName(`${deviceName} (${device.deviceArea})`),
+                model: device.deviceType,
+                serialNumber: device.deviceLabel,
+                value: 0
               });
-           });
-           devices = devices.concat(locks);
-        }
+            }));
 
-        callback(devices);
-      });
+            devices = devices.concat(overview.smartPlugs.map(function(device) {
+              return new VerisureAccessory(log, {
+                installation: installation,
+                name: getUniqueName(`${DEVICE_TYPES.SMARTPLUG} (${device.area})`),
+                model: 'SMARTPLUG',
+                serialNumber: device.deviceLabel,
+                value: device.currentState == 'ON' ? 1 : 0
+              });
+            }));
+
+            if (overview && overview.doorLockStatusList){
+              devices = devices.concat(overview.doorLockStatusList.map(function(device){
+                  return new VerisureAccessory(log, {
+                    installation: installation,
+                    name: getUniqueName(`${device.area}`),
+                    model: 'DOORLOCK',
+                    serialNumber: device.deviceLabel,
+                    value: device.lockedState==='LOCKED' ? 1 : 0,
+                    doorcode: config.doorcode,
+                    category: 6 // Hardcoded from Accessory.Categories in Accessory.js of hap-nodejs
+                  });
+              }));
+            }
+            resolve(devices);
+          });
+        })
+      })
+      return Promise.all(promises)
+    }).then(function(results){
+      let devices = []
+      results.map(function(result) {
+        devices = devices.concat(result)
+      })
+      callback(devices);
+    }).catch(function(err) {
+      log.error(err)
     })
   }
 }
@@ -134,7 +152,8 @@ const VerisurePlatform = function(log, config, api) {
 const VerisureAccessory = function(log, config) {
   this.log = log;
   this.config = config;
-
+  
+  this.installation = config.installation
   this.name = config.name;
   this.model = config.model;
   this.serialNumber = config.serialNumber;
@@ -148,10 +167,10 @@ VerisureAccessory.prototype = {
     this.log(`${this.name} (${this.serialNumber}): Getting current temperature...`);
     const that = this;
 
-    getOverview(function(err, overview) {
-      if(err) return callback(err);
+    getOverview(this.installation, function(err, overview) {
+      if (err) return callback(err);
       overview.climateValues.map(function(device) {
-        if(device.deviceLabel != that.serialNumber) return;
+        if (device.deviceLabel != that.serialNumber) return;
         that.value = device.temperature;
         callback(err, that.value);
       });
@@ -162,10 +181,10 @@ VerisureAccessory.prototype = {
     this.log(`${this.name} (${this.serialNumber}): Getting current value...`);
     const that = this;
 
-    getOverview(function(err, overview) {
-      if(err) return callback(err);
+    getOverview(this.installation, function(err, overview) {
+      if (err) return callback(err);
       overview.smartPlugs.map(function(device) {
-        if(device.deviceLabel != that.serialNumber) return;
+        if (device.deviceLabel != that.serialNumber) return;
         that.value = device.currentState == 'ON' ? 1 : 0;
         callback(err, that.value);
       });
@@ -178,7 +197,7 @@ VerisureAccessory.prototype = {
 
     verisure._apiClient({
       method: 'POST',
-      uri: `/installation/${VERISURE_INSTALLATION.giid}/smartplug/state`,
+      uri: `/installation/${this.installation.giid}/smartplug/state`,
       headers: {
         'Cookie': `vid=${VERISURE_TOKEN}`,
         'Accept': 'application/json, text/javascript, */*; q=0.01'
@@ -196,7 +215,7 @@ VerisureAccessory.prototype = {
     this.log(`${this.name} (${this.serialNumber}): GETTING CURRENT LOCK STATE`);
     verisure._apiClient({
         method: 'GET',
-        uri: `/installation/${VERISURE_INSTALLATION.giid}/doorlockstate/search`,
+        uri: `/installation/${this.installation.giid}/doorlockstate/search`,
         headers: {
           'Cookie': `vid=${VERISURE_TOKEN}`,
           'Accept': 'application/json, text/javascript, */*; q=0.01'
@@ -228,7 +247,7 @@ VerisureAccessory.prototype = {
 
     verisure._apiClient({
         method: 'GET',
-        uri: `/installation/${VERISURE_INSTALLATION.giid}/doorlockstate/search`,
+        uri: `/installation/${this.installation.giid}/doorlockstate/search`,
         headers: {
           'Cookie': `vid=${VERISURE_TOKEN}`,
           'Accept': 'application/json, text/javascript, */*; q=0.01'
@@ -254,7 +273,7 @@ VerisureAccessory.prototype = {
     let actionValue = value ? "lock":"unlock";
     verisure._apiClient({
       method: 'PUT',
-      uri: `/installation/${VERISURE_INSTALLATION.giid}/device/${this.serialNumber}/${actionValue}`,
+      uri: `/installation/${this.installation.giid}/device/${this.serialNumber}/${actionValue}`,
       headers: {
         'Cookie': `vid=${VERISURE_TOKEN}`,
         'Accept': 'application/json, text/javascript, */*; q=0.01'
@@ -284,7 +303,7 @@ VerisureAccessory.prototype = {
     setTimeout(function(value, callback, response){
       verisure._apiClient({
         method: 'GET',
-        uri: `/installation/${VERISURE_INSTALLATION.giid}/doorlockstate/change/result/${response.body.doorLockStateChangeTransactionId}`,
+        uri: `/installation/${this.installation.giid}/doorlockstate/change/result/${response.body.doorLockStateChangeTransactionId}`,
         headers: {
           'Cookie': `vid=${VERISURE_TOKEN}`,
           'Accept': 'application/json, text/javascript, */*; q=0.01'
@@ -315,7 +334,7 @@ VerisureAccessory.prototype = {
 
     let service = null;
 
-    if(['SMARTPLUG'].includes(this.model)) {
+    if (['SMARTPLUG'].includes(this.model)) {
       service = new Service.Switch(this.name);
       service
         .getCharacteristic(Characteristic.On)
@@ -338,14 +357,14 @@ VerisureAccessory.prototype = {
       this.service = service;
     }
 
-    if(['HUMIDITY1', 'SIREN1', 'SMARTCAMERA1' ,'SMOKE2', 'VOICEBOX1'].includes(this.model)) {
+    if (['HUMIDITY1', 'SIREN1', 'SMARTCAMERA1' ,'SMOKE2', 'VOICEBOX1'].includes(this.model)) {
       service = new Service.TemperatureSensor(this.name);
       service
         .getCharacteristic(Characteristic.CurrentTemperature)
         .on('get', this._getCurrentTemperature.bind(this));
     }
 
-    if(!service) {
+    if (!service) {
       this.log.error(`Device ${this.model} is not yet supported`);
     }
 
