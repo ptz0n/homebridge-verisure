@@ -10,6 +10,7 @@ working implementation for several Verisure devices:
 - [x] __SMARTPLUG__ - State, on, off
 - [x] __SMOKE2__ - Temperature
 - [x] __VOICEBOX1__ - Temperature
+- [x] __HOMEPAD1__ - Temperature
 
 ## Installation
 
