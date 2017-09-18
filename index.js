@@ -19,7 +19,8 @@ const DEVICE_TYPES = {
   'SMARTCAMERA1': 'Smart Camera',
   'SMARTPLUG': 'Smart plug',
   'SMOKE2': 'Rökdetektor',
-  'VOICEBOX1': 'Directenhet'
+  'VOICEBOX1': 'Directenhet',
+  'HOMEPAD1': 'Adminpanel'
 }
 
 let VERISURE_TOKEN = null;
@@ -338,7 +339,7 @@ VerisureAccessory.prototype = {
       this.service = service;
     }
 
-    if(['HUMIDITY1', 'SIREN1', 'SMARTCAMERA1' ,'SMOKE2', 'VOICEBOX1'].includes(this.model)) {
+    if(['HUMIDITY1', 'SIREN1', 'SMARTCAMERA1' ,'SMOKE2', 'VOICEBOX1', 'HOMEPAD1'].includes(this.model)) {
       service = new Service.TemperatureSensor(this.name);
       service
         .getCharacteristic(Characteristic.CurrentTemperature)
