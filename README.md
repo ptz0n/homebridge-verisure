@@ -1,5 +1,7 @@
 # homebridge-verisure
 
+[![](https://travis-ci.org/ptz0n/homebridge-verisure.svg?branch=master)](https://travis-ci.org/ptz0n/homebridge-verisure)
+
 This is a plugin for [homebridge](https://github.com/nfarina/homebridge). It's a
 working implementation for several Verisure devices:
 
