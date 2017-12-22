@@ -29,7 +29,6 @@ let VERISURE_DEVICE_NAMES = []
 
 
 const getVerisureInstallation = function(config, callback) {
-  
   verisure.auth(config.email, config.password, function(err, token) {
     if(err) return callback(err);
     VERISURE_TOKEN = token;
@@ -77,7 +76,7 @@ module.exports = function(homebridge) {
   Characteristic = homebridge.hap.Characteristic;
   UUIDGen = homebridge.hap.uuid;
 
-  homebridge.registerPlatform(PLUGIN_NAME, PLATFORM_NAME, VerisurePlatform, true);
+  return homebridge.registerPlatform(PLUGIN_NAME, PLATFORM_NAME, VerisurePlatform, true);
 }
 
 
@@ -259,7 +258,7 @@ VerisureAccessory.prototype = {
         'Cookie': `vid=${VERISURE_TOKEN}`,
         'Accept': 'application/json, text/javascript, */*; q=0.01'
       },
-      json: 
+      json:
       {
           "code": this.config.doorcode
       }
@@ -290,9 +289,9 @@ VerisureAccessory.prototype = {
           'Accept': 'application/json, text/javascript, */*; q=0.01'
         }
       }, function(value, origResponse, callback,error,response){
-        if (error != null) 
+        if (error != null)
           this.log(`**** ERROR: ${JSON.stringify(error)}`);
-        
+
         this.log(`**** Response: Doorlockstate: ${JSON.stringify(response)}`);
         let body = JSON.parse(response.body);
         if (body.result == "NO_DATA"){
