@@ -1,5 +1,7 @@
 # homebridge-verisure
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/ptz0n/homebridge-verisure.svg)](https://greenkeeper.io/)
+
 This is a plugin for [homebridge](https://github.com/nfarina/homebridge). It's a
 working implementation for several Verisure devices:
 
