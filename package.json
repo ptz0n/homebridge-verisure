@@ -18,6 +18,6 @@
     "homebridge": ">=0.2.0"
   },
   "dependencies": {
-    "verisure": "^1.2.0"
+    "verisure": "^2.1.0"
   }
 }
