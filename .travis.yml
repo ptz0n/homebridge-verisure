@@ -6,6 +6,9 @@ node_js:
   - 7
   - 6
 
+before_install:
+  - sudo apt-get install libavahi-compat-libdnssd-dev
+
 cache:
   directories:
     - node_modules
