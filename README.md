@@ -1,7 +1,11 @@
 # homebridge-verisure
 
-This is a plugin for [homebridge](https://github.com/nfarina/homebridge). It's a
-working implementation for several Verisure devices:
+[![Greenkeeper badge](https://badges.greenkeeper.io/ptz0n/homebridge-verisure.svg)](https://greenkeeper.io/)
+
+[![](https://travis-ci.org/ptz0n/homebridge-verisure.svg?branch=master)](https://travis-ci.org/ptz0n/homebridge-verisure)
+
+This is a plugin for [homebridge](https://github.com/nfarina/homebridge). It's
+an implementation for several Verisure devices:
 
 - [x] __DOORLOCK__ - Yale Doorman Lock/Unlock
 - [x] __HUMIDITY1__ - Temperature
