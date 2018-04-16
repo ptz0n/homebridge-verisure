@@ -12,12 +12,12 @@ class ClimateSensor extends VerisureAccessory {
   constructor(...args) {
     super(...args);
 
-    const { deviceArea, deviceType } = this.config;
+    const { deviceArea, deviceType, temperature } = this.config;
     const name = deviceNames[deviceType] || deviceType;
 
     this.model = deviceType;
     this.name = VerisureAccessory.getUniqueAccessoryName(`${name} (${deviceArea})`);
-    this.value = 0;
+    this.value = temperature;
   }
 
   getCurrentTemperature(callback) {
