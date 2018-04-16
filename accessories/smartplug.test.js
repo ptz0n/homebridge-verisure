@@ -3,7 +3,7 @@ const hap = require('hap-nodejs');
 const SmartPlug = require('./smartplug');
 
 describe('SmartPlug', () => {
-  it.only('setup name and value', () => {
+  it('setup name and value', () => {
     const homebridge = { hap };
     const config = {
       area: 'Living room',
@@ -14,7 +14,8 @@ describe('SmartPlug', () => {
     expect(smartPlug.name).toBe('SmartPlug (Living room)');
     expect(smartPlug.value).toBe(1);
 
-    const anotherSmartPlug = new SmartPlug(homebridge, null, { ...config, currentState: 'OFF' });
+    config.currentState = 'OFF';
+    const anotherSmartPlug = new SmartPlug(homebridge, null, config);
     expect(anotherSmartPlug.value).toBe(0);
   });
 });

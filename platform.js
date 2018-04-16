@@ -44,7 +44,7 @@ class VerisurePlatform {
           homebridge,
           this.log,
           deviceConfig,
-          installation,
+          installation
         ));
       });
     });
