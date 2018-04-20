@@ -1,11 +1,13 @@
 const VerisureAccessory = require('./verisure');
+const i18n = require('../i18n');
 
 const deviceNames = {
-  HUMIDITY1: 'Klimatdetektor',
+  HOMEPAD1: 'VoiceBox',
+  HUMIDITY1: 'Climate sensor',
   SIREN1: 'Siren',
-  SMARTCAMERA1: 'Smart Camera',
-  SMOKE2: 'Rökdetektor',
-  VOICEBOX1: 'Directenhet',
+  SMARTCAMERA1: 'SmartCam',
+  SMOKE2: 'Smoke detector',
+  VOICEBOX1: 'VoiceBox',
 };
 
 class ClimateSensor extends VerisureAccessory {
@@ -13,7 +15,8 @@ class ClimateSensor extends VerisureAccessory {
     super(...args);
 
     const { deviceArea, deviceType, temperature } = this.config;
-    const name = deviceNames[deviceType] || deviceType;
+    const _ = i18n(this.installation.locale);
+    const name = _(deviceNames[deviceType]) || deviceType;
 
     this.model = deviceType;
     this.name = VerisureAccessory.getUniqueAccessoryName(`${name} (${deviceArea})`);

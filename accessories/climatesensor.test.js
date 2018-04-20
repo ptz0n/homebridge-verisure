@@ -10,8 +10,11 @@ describe('ClimateSensor', () => {
       deviceType: 'SMOKE2',
       temperature: 22,
     };
+    const installation = {
+      locale: 'sv_SE',
+    };
 
-    const climateSensor = new ClimateSensor(homebridge, null, config);
+    const climateSensor = new ClimateSensor(homebridge, null, config, installation);
     expect(climateSensor.name).toBe('Rökdetektor (Hallway)');
     expect(climateSensor.value).toBe(22);
   });
