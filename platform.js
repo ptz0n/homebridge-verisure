@@ -24,7 +24,7 @@ class VerisurePlatform {
   static overviewToDeviceConfigs(overview) {
     const deviceTypes = {
       climateSensor: overview.climateValues || [],
-      // doorLock: overview.doorLockStatusList || [],
+      doorLock: overview.doorLockStatusList || [],
       // doorWindowSensor: (overview.doorWindow && overview.doorWindow.doorWindowDevice) || [],
       smartPlug: overview.smartPlugs || [],
     };
@@ -44,7 +44,8 @@ class VerisurePlatform {
           homebridge,
           this.log,
           deviceConfig,
-          installation
+          installation,
+          this.config
         ));
       });
     });

@@ -1,11 +1,12 @@
 const uniqueAccessoryNames = [];
 
 class VerisureAccessory {
-  constructor(homebridge, log, config, installation) {
+  constructor(homebridge, log, config, installation, platformConfig) {
+    this.homebridge = homebridge;
     this.log = log;
     this.config = config;
     this.installation = installation;
-    this.homebridge = homebridge;
+    this.platformConfig = platformConfig;
 
     this.serialNumber = config.deviceLabel;
 
