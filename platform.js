@@ -23,6 +23,7 @@ class VerisurePlatform {
 
   static overviewToDeviceConfigs(overview) {
     const deviceTypes = {
+      alarm: [{ statusType: overview.armState.statusType }] || [],
       climateSensor: overview.climateValues || [],
       doorLock: overview.doorLockStatusList || [],
       // doorWindowSensor: (overview.doorWindow && overview.doorWindow.doorWindowDevice) || [],
