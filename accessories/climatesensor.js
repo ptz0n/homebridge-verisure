@@ -8,6 +8,7 @@ const deviceNames = {
   SMARTCAMERA1: 'SmartCam',
   SMOKE2: 'Smoke detector',
   VOICEBOX1: 'VoiceBox',
+  WATER1: 'Water detector',
 };
 
 class ClimateSensor extends VerisureAccessory {
