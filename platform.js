@@ -22,15 +22,15 @@ class VerisurePlatform {
   }
 
   static overviewToDeviceConfigs(overview) {
+    const alarm = overview.armState ? [{ statusType: overview.armState.statusType }] : [];
+
     const deviceTypes = {
-      alarm: [{ statusType: overview.armState.statusType }] || [],
+      alarm,
       climateSensor: overview.climateValues || [],
       doorLock: overview.doorLockStatusList || [],
       // doorWindowSensor: (overview.doorWindow && overview.doorWindow.doorWindowDevice) || [],
       smartPlug: overview.smartPlugs || [],
     };
-
-    // console.log('overview', overview);
 
     return deviceTypes;
   }
