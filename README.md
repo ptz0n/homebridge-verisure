@@ -36,7 +36,8 @@ your array (list) of enabled platform plugins.
     "name" : "Verisure",
     "email": "your@email.com",
     "password": "yourT0p5ecre7Passw0rd",
-    "doorcode": "000000"
+    "alarmCode": "0000",
+    "doorCode": "000000"
   }
 ]
 ```
