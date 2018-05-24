@@ -42,12 +42,6 @@ describe('ClimateSensor', () => {
     });
   });
 
-  it('gets services', () => {
-    const [accessoryInformation, service] = climateSensor.getServices();
-    expect(accessoryInformation).toBeTruthy();
-    expect(service).toBeTruthy();
-  });
-
   it('setup name for unknown device type', () => {
     config.deviceType = 'FOOBAR';
     config.deviceArea = 'Kitchen';
