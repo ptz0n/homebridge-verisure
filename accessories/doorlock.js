@@ -41,6 +41,8 @@ class DoorLock extends VerisureAccessory {
   }
 
   getCurrentLockState(callback) {
+    this.log('Getting current lock state.');
+
     this.getDoorLockState().then((doorLock) => {
       this.value = this.resolveCurrentLockState(doorLock);
       callback(null, this.value);
@@ -48,6 +50,8 @@ class DoorLock extends VerisureAccessory {
   }
 
   getTargetLockState(callback) {
+    this.log('Getting target lock state.');
+
     this.getDoorLockState().then((doorLock) => {
       const { LockTargetState } = this.homebridge.hap.Characteristic;
       const { pendingLockState, currentLockState } = doorLock;
@@ -59,20 +63,9 @@ class DoorLock extends VerisureAccessory {
     }).catch(callback);
   }
 
-  getLockStateChangeResult({ doorLockStateChangeTransactionId }) {
-    // TODO: Handle max retries
-    const request = { uri: `/doorlockstate/change/result/${doorLockStateChangeTransactionId}` };
-
-    return this.installation.client(request).then(({ result }) => {
-      if (result === 'NO_DATA') {
-        return new Promise(resolve => setTimeout(() =>
-          resolve(this.getLockStateChangeResult({ doorLockStateChangeTransactionId })), 200));
-      }
-      return true;
-    });
-  }
-
   setTargetLockState(value, callback) {
+    this.log(`Setting target lock state to: ${value}`);
+
     const request = {
       method: 'PUT',
       uri: `/device/${this.serialNumber}/${value ? 'lock' : 'unlock'}`,
@@ -82,7 +75,8 @@ class DoorLock extends VerisureAccessory {
     };
 
     this.installation.client(request)
-      .then(this.getLockStateChangeResult.bind(this))
+      .then(({ doorLockStateChangeTransactionId }) =>
+        this.resolveChangeResult(`/doorlockstate/change/result/${doorLockStateChangeTransactionId}`))
       .catch((error) => {
         if (error.errorCode === 'VAL_00819') {
           // Lock at desired state.

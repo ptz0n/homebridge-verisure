@@ -4,6 +4,7 @@ const Alarm = require('./alarm');
 
 describe('Alarm', () => {
   const homebridge = { hap };
+  const logger = jest.fn();
   const config = {
     statusType: 'DISARMED',
   };
@@ -11,8 +12,11 @@ describe('Alarm', () => {
     config: { alias: 'Kungsgatan' },
     getOverview: null,
   };
+  const platformConfig = {
+    alarmCode: '000000',
+  };
   const { SecuritySystemCurrentState } = hap.Characteristic;
-  const alarm = new Alarm(homebridge, null, config, installation);
+  const alarm = new Alarm(homebridge, logger, config, installation, platformConfig);
 
   it('setup name and value', () => {
     expect(alarm.name).toBe('Alarm (Kungsgatan)');
@@ -23,6 +27,11 @@ describe('Alarm', () => {
     expect(alarm.resolveArmState('DISARMED')).toBe(SecuritySystemCurrentState.DISARMED);
     expect(alarm.resolveArmState('ARMED_AWAY')).toBe(SecuritySystemCurrentState.AWAY_ARM);
     expect(alarm.resolveArmState('ARMED_HOME')).toBe(SecuritySystemCurrentState.STAY_ARM);
+
+    expect(alarm.resolveArmState(SecuritySystemCurrentState.DISARMED)).toBe('DISARMED');
+    expect(alarm.resolveArmState(SecuritySystemCurrentState.AWAY_ARM)).toBe('ARMED_AWAY');
+    expect(alarm.resolveArmState(SecuritySystemCurrentState.STAY_ARM)).toBe('ARMED_HOME');
+
     expect(() => alarm.resolveArmState('FOOBAR')).toThrow();
   });
 

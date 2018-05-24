@@ -5,14 +5,14 @@ const accessoryClasses = require('./accessories');
 let homebridge = null;
 
 class VerisurePlatform {
-  constructor(log, config) {
+  constructor(logger, config) {
     if (!homebridge) {
       throw Error('Module not initiated.');
     }
 
     this.config = config;
     this.homebridge = homebridge;
-    this.log = log;
+    this.logger = logger;
 
     this.verisure = new Verisure(this.config.email, config.password);
   }
@@ -43,7 +43,7 @@ class VerisurePlatform {
       deviceTypes[deviceType].forEach((deviceConfig) => {
         accessories.push(new accessoryClasses[deviceType](
           homebridge,
-          this.log,
+          this.logger,
           deviceConfig,
           installation,
           this.config
@@ -65,7 +65,7 @@ class VerisurePlatform {
         callback(accessoryLists.reduce((a, b) => [...a, ...b]));
       })
       .catch((error) => {
-        this.log.error(error);
+        this.logger.error(error);
         callback(error);
       });
   }

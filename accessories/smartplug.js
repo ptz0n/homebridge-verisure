@@ -6,25 +6,30 @@ class SmartPlug extends VerisureAccessory {
 
     this.model = 'SMARTPLUG';
     this.name = VerisureAccessory.getUniqueAccessoryName(`SmartPlug (${this.config.area})`);
-    this.value = this.config.currentState === 'ON' ? 1 : 0;
+    this.value = SmartPlug.resolveSwitchState(this.config.currentState);
   }
 
-  getSwitchOn(callback) {
-    this.log(`${this.name} (${this.serialNumber}): Getting current value...`);
+  static resolveSwitchState(input) {
+    return input === 'ON';
+  }
+
+  getSwitchState(callback) {
+    this.log('Getting current switch state.');
 
     this.installation.getOverview()
       .then(overview =>
         overview.smartPlugs.find(smartPlug =>
           smartPlug.deviceLabel === this.serialNumber))
       .then((smartPlug) => {
-        this.value = smartPlug.currentState === 'ON' ? 1 : 0;
+        this.value = SmartPlug.resolveSwitchState(smartPlug.currentState);
         callback(null, this.value);
       })
       .catch(callback);
   }
 
-  setSwitchOn(value, callback) {
-    this.log(`${this.name} (${this.serialNumber}): Setting current value to "${value}"...`);
+  setSwitchState(value, callback) {
+    this.log(`Setting switch state to: ${value}`);
+
     this.value = value;
 
     const request = {
@@ -32,7 +37,7 @@ class SmartPlug extends VerisureAccessory {
       uri: '/smartplug/state',
       json: [{
         deviceLabel: this.serialNumber,
-        state: value === 1,
+        state: value,
       }],
     };
 
@@ -47,8 +52,8 @@ class SmartPlug extends VerisureAccessory {
     this.service = new Service.Switch(this.name);
     this.service
       .getCharacteristic(Characteristic.On)
-      .on('get', this.getSwitchOn.bind(this))
-      .on('set', this.setSwitchOn.bind(this))
+      .on('get', this.getSwitchState.bind(this))
+      .on('set', this.setSwitchState.bind(this))
       .value = this.value;
 
     this.accessoryInformation.setCharacteristic(Characteristic.Model, this.model);

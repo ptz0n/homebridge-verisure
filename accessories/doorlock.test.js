@@ -4,6 +4,7 @@ const DoorLock = require('./doorlock');
 
 describe('DoorLock', () => {
   const homebridge = { hap };
+  const logger = jest.fn();
   const config = {
     deviceArea: 'Entré',
     deviceLabel: '1234',
@@ -16,7 +17,7 @@ describe('DoorLock', () => {
     doorCode: '000000',
   };
   const { LockCurrentState, LockTargetState } = hap.Characteristic;
-  const doorLock = new DoorLock(homebridge, null, config, installation, platformConfig);
+  const doorLock = new DoorLock(homebridge, logger, config, installation, platformConfig);
 
   doorLock.getServices();
 
@@ -69,28 +70,6 @@ describe('DoorLock', () => {
       expect(error).toBe(null);
       expect(value).toBe(LockTargetState.SECURED);
       done();
-    });
-  });
-
-  it('get lock state change result', () => {
-    installation.client = jest.fn();
-    installation.client.mockResolvedValueOnce({
-      result: 'NO_DATA',
-    });
-    installation.client.mockResolvedValueOnce({
-      result: 'READY',
-    });
-
-    const setLockStateResponse = {
-      doorLockStateChangeTransactionId: 'asd123',
-    };
-
-    return doorLock.getLockStateChangeResult(setLockStateResponse).then((result) => {
-      expect(result).toBe(true);
-      const { calls } = installation.client.mock;
-      expect(calls[0][0].uri).toBe('/doorlockstate/change/result/asd123');
-      expect(calls[1][0].uri).toBe('/doorlockstate/change/result/asd123');
-      expect(calls.length).toBe(2);
     });
   });
 

@@ -11,10 +11,10 @@ describe('Platform', () => {
 
   it('module exposes a platform class', () => {
     VerisurePlatform.init('homebridge');
-    const platform = new VerisurePlatform('log', 'config');
+    const platform = new VerisurePlatform('logger', 'config');
     expect(platform).toBeInstanceOf(VerisurePlatform);
     expect(platform.config).toBe('config');
-    expect(platform.log).toBe('log');
+    expect(platform.logger).toBe('logger');
   });
 
   it('transform empty overview into empty lists of device configs', () => {

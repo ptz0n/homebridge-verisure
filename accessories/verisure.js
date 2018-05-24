@@ -1,9 +1,9 @@
 const uniqueAccessoryNames = [];
 
 class VerisureAccessory {
-  constructor(homebridge, log, config, installation, platformConfig) {
+  constructor(homebridge, logger, config, installation, platformConfig) {
     this.homebridge = homebridge;
-    this.log = log;
+    this.logger = logger;
     this.config = config;
     this.installation = installation;
     this.platformConfig = platformConfig;
@@ -28,6 +28,22 @@ class VerisureAccessory {
     }
     uniqueAccessoryNames.push(name);
     return name;
+  }
+
+  resolveChangeResult(uri) {
+    // TODO: Handle max retries
+
+    return this.installation.client({ uri }).then(({ result }) => {
+      if (typeof result === 'undefined' || result === 'NO_DATA') {
+        return new Promise(resolve => setTimeout(() =>
+          resolve(this.resolveChangeResult(uri)), 200));
+      }
+      return result;
+    });
+  }
+
+  log(message) {
+    return this.logger('info', `${this.name}: ${message}`);
   }
 }
 

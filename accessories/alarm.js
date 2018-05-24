@@ -4,28 +4,46 @@ class Alarm extends VerisureAccessory {
   constructor(...args) {
     super(...args);
 
+    const { alarmCode } = this.platformConfig;
+    this.alarmCode = alarmCode.toString();
     this.model = 'ALARM';
     this.name = VerisureAccessory.getUniqueAccessoryName(`Alarm (${this.installation.config.alias})`);
 
+    const { SecuritySystemCurrentState } = this.homebridge.hap.Characteristic;
+    this.armStateMap = {
+      ARMED_AWAY: SecuritySystemCurrentState.AWAY_ARM,
+      ARMED_HOME: SecuritySystemCurrentState.STAY_ARM,
+      DISARMED: SecuritySystemCurrentState.DISARMED,
+    };
+
     this.value = this.resolveArmState(this.config.statusType);
+
+    // TODO: Init polling for externally invoked state changes.
   }
 
-  resolveArmState(statusType) {
-    const { SecuritySystemCurrentState } = this.homebridge.hap.Characteristic;
+  resolveArmState(input) {
+    let output;
 
-    switch (statusType) {
-      case 'ARMED_AWAY':
-        return SecuritySystemCurrentState.AWAY_ARM;
-      case 'ARMED_HOME':
-        return SecuritySystemCurrentState.STAY_ARM;
-      case 'DISARMED':
-        return SecuritySystemCurrentState.DISARMED;
-      default:
-        throw Error(`Cannot resolve arm state from unknown statusType "${statusType}".`);
+    // Verisure to HAP
+    if (typeof input === 'string') {
+      output = this.armStateMap[input];
     }
+
+    // HAP to Verisure
+    if (typeof input === 'number') {
+      output = Object.keys(this.armStateMap).find(key => this.armStateMap[key] === input);
+    }
+
+    if (typeof output === 'undefined') {
+      throw Error(`Cannot resolve arm state from unknown input: ${input}`);
+    }
+
+    return output;
   }
 
   getCurrentAlarmState(callback) {
+    this.log('Getting current alarm state.');
+
     this.installation.getOverview()
       .then((overview) => {
         this.value = this.resolveArmState(overview.armState.statusType);
@@ -36,6 +54,29 @@ class Alarm extends VerisureAccessory {
       });
   }
 
+  setTargetAlarmState(value, callback) {
+    this.log(`Setting target alarm state to: ${value}`);
+
+    const request = {
+      method: 'PUT',
+      uri: '/armstate/code',
+      json: {
+        code: this.alarmCode,
+        state: this.resolveArmState(value),
+      },
+    };
+    this.installation.client(request)
+      .then(({ armStateChangeTransactionId }) =>
+        this.resolveChangeResult(`/code/result/${armStateChangeTransactionId}`))
+      .then(() => {
+        const { Characteristic } = this.homebridge.hap;
+        this.service.setCharacteristic(Characteristic.SecuritySystemCurrentState, value);
+        this.value = value;
+        callback(null);
+      })
+      .catch(callback);
+  }
+
   getServices() {
     const { Service, Characteristic } = this.homebridge.hap;
 
@@ -44,10 +85,10 @@ class Alarm extends VerisureAccessory {
       .getCharacteristic(Characteristic.SecuritySystemCurrentState)
       .on('get', this.getCurrentAlarmState.bind(this));
 
-    // this.service
-    //   .getCharacteristic(Characteristic.SecuritySystemTargetState)
-    //   .on('get', this.getCurrentAlarmState.bind(this))
-    //   .on('set', this.setTargetAlarmState.bind(this));
+    this.service
+      .getCharacteristic(Characteristic.SecuritySystemTargetState)
+      .on('get', this.getCurrentAlarmState.bind(this))
+      .on('set', this.setTargetAlarmState.bind(this));
 
     this.accessoryInformation.setCharacteristic(Characteristic.Model, this.model);
 

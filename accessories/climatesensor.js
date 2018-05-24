@@ -25,7 +25,7 @@ class ClimateSensor extends VerisureAccessory {
   }
 
   getCurrentTemperature(callback) {
-    this.log(`${this.name} (${this.serialNumber}): Getting current temperature...`);
+    this.log('Getting current temperature.');
 
     this.installation.getOverview()
       .then(overview =>
