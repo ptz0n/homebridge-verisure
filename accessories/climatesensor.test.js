@@ -48,4 +48,10 @@ describe('ClimateSensor', () => {
     const anotherClimateSensor = new ClimateSensor(homebridge, logger, config, installation);
     expect(anotherClimateSensor.name).toBe('FOOBAR (Kitchen)');
   });
+
+  it('expose services', () => {
+    const services = climateSensor.getServices();
+    expect(services.length).toBe(2);
+    expect(Array.isArray(services)).toBe(true);
+  });
 });
