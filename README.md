@@ -7,14 +7,14 @@
 This is a plugin for [homebridge](https://github.com/nfarina/homebridge). It's
 an implementation for your Verisure installation and exposes the following devices:
 
-- [x] __ALARM__ - Arm state, off, home, away.
-- [x] __DOORLOCK__ - Yale Doorman Lock/Unlock.
-- [x] __HUMIDITY1__ - Temperature.
-- [x] __SIREN1__ - Temperature.
-- [x] __SMARTCAMERA1__ - Temperature.
-- [x] __SMARTPLUG__ - State, on, off.
-- [x] __SMOKE2__ - Temperature.
-- [x] __VOICEBOX1__ - Temperature.
+- Climate sensor
+- Magnetic contact
+- Night Control
+- Siren
+- SmartLock
+- SmartPlug
+- Smoke detector
+- Vibration detector
 
 ## Installation
 

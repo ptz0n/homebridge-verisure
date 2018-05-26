@@ -21,6 +21,7 @@ describe('Platform', () => {
     const deviceConfigs = {
       alarm: [],
       climateSensor: [],
+      contactSensor: [],
       doorLock: [],
       smartPlug: [],
     };
@@ -38,6 +39,7 @@ describe('Platform', () => {
     expect(VerisurePlatform.overviewToDeviceConfigs(overview)).toMatchObject({
       alarm: [],
       climateSensor: [{ deviceLabel: 'ABCD 1234' }],
+      contactSensor: [{ deviceLabel: 'DEFG 2345' }],
       doorLock: [],
       smartPlug: [{ deviceLabel: 'EFGH 3456' }],
     });

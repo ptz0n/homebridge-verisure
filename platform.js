@@ -27,8 +27,8 @@ class VerisurePlatform {
     const deviceTypes = {
       alarm,
       climateSensor: overview.climateValues || [],
+      contactSensor: (overview.doorWindow && overview.doorWindow.doorWindowDevice) || [],
       doorLock: overview.doorLockStatusList || [],
-      // doorWindowSensor: (overview.doorWindow && overview.doorWindow.doorWindowDevice) || [],
       smartPlug: overview.smartPlugs || [],
     };
 
