@@ -7,6 +7,7 @@ const deviceNames = {
   SIREN1: 'Siren',
   SMARTCAMERA1: 'SmartCam',
   SMOKE2: 'Smoke detector',
+  SMOKE3: 'Smoke detector',
   VOICEBOX1: 'VoiceBox',
   WATER1: 'Water detector',
 };
