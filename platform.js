@@ -40,6 +40,14 @@ class VerisurePlatform {
     const deviceTypes = VerisurePlatform.overviewToDeviceConfigs(overview);
 
     Object.keys(deviceTypes).forEach((deviceType) => {
+      if (deviceType === 'alarm' && !this.config.alarmCode) {
+        return;
+      }
+
+      if (deviceType === 'doorLock' && (!this.config.doorcode || !this.config.doorCode)) {
+        return;
+      }
+
       deviceTypes[deviceType].forEach((deviceConfig) => {
         accessories.push(new accessoryClasses[deviceType](
           homebridge,
