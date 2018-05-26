@@ -35,7 +35,7 @@ describe('ClimateSensor', () => {
     });
 
     climateSensor.getCurrentTemperature((error, value) => {
-      expect(error).toBe(null);
+      expect(error).toBeNull();
       expect(value).toBe(22.5);
       expect(climateSensor.value).toBe(22.5);
       done();

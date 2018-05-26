@@ -39,7 +39,7 @@ describe('ContactSensor', () => {
     });
 
     contactSensor.getCurrentSensorState((error, value) => {
-      expect(error).toBe(null);
+      expect(error).toBeNull();
       expect(value).toBe(true);
       expect(contactSensor.value).toBe(true);
       done();

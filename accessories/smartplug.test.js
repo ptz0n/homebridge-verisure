@@ -26,7 +26,7 @@ describe('SmartPlug', () => {
       }],
     });
     smartPlug.getSwitchState((error, value) => {
-      expect(error).toBe(null);
+      expect(error).toBeNull();
       expect(value).toBe(false);
       done();
     });
@@ -39,7 +39,7 @@ describe('SmartPlug', () => {
 
     smartPlug.setSwitchState(true, (error) => {
       expect(smartPlug.value).toBe(true);
-      expect(error).toBe(null);
+      expect(error).toBeNull();
       done();
     });
   });

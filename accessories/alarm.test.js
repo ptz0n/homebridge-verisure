@@ -43,7 +43,7 @@ describe('Alarm', () => {
       },
     });
     alarm.getCurrentAlarmState((error, value) => {
-      expect(error).toBe(null);
+      expect(error).toBeNull();
       expect(value).toBe(SecuritySystemCurrentState.AWAY_ARM);
       done();
     });
