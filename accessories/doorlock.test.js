@@ -52,9 +52,24 @@ describe('DoorLock', () => {
       deviceLabel: doorLock.serialNumber,
     }]);
     doorLock.getCurrentLockState((error, value) => {
-      expect(error).toBe(null);
+      expect(error).toBeNull();
       expect(value).toBe(LockCurrentState.SECURED);
       expect(doorLock.value).toBe(LockCurrentState.SECURED);
+      done();
+    });
+  });
+
+  it('errors when not able to get lock state', (done) => {
+    installation.client = () => Promise.resolve([{
+      currentLockState: 'LOCKED',
+      deviceLabel: 'NOT MATCHING LABEL',
+    }]);
+    const currentDoorLockValue = doorLock.value;
+    doorLock.getCurrentLockState((error, value) => {
+      expect(error).toBeTruthy();
+      expect(error.message).toBe('Could not find lock state for SmartLock (Entré).');
+      expect(value).toBeUndefined();
+      expect(doorLock.value).toBe(currentDoorLockValue);
       done();
     });
   });
@@ -67,7 +82,7 @@ describe('DoorLock', () => {
       pendingLockState: 'LOCKED',
     }]);
     doorLock.getTargetLockState((error, value) => {
-      expect(error).toBe(null);
+      expect(error).toBeNull();
       expect(value).toBe(LockTargetState.SECURED);
       done();
     });
@@ -86,7 +101,7 @@ describe('DoorLock', () => {
     });
 
     doorLock.setTargetLockState(LockTargetState.SECURED, (error) => {
-      expect(error).toBe(null);
+      expect(error).toBeNull();
       const { calls } = installation.client.mock;
       expect(calls.length).toBe(3);
       done();
@@ -98,7 +113,17 @@ describe('DoorLock', () => {
     installation.client.mockRejectedValue({ errorCode: 'VAL_00819' });
 
     doorLock.setTargetLockState(LockTargetState.SECURED, (error) => {
-      expect(error).toBe(null);
+      expect(error).toBeNull();
+      done();
+    });
+  });
+
+  it('handles error when setting lock state', (done) => {
+    installation.client = jest.fn();
+    installation.client.mockRejectedValue({ errorCode: 'VAL_1337' });
+
+    doorLock.setTargetLockState(LockTargetState.SECURED, (error) => {
+      expect(error.errorCode).toBe('VAL_1337');
       done();
     });
   });
