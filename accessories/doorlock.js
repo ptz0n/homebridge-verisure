@@ -103,8 +103,6 @@ class DoorLock extends VerisureAccessory {
       .on('get', this.getTargetLockState.bind(this))
       .on('set', this.setTargetLockState.bind(this));
 
-    this.accessoryInformation.setCharacteristic(Characteristic.Model, this.model);
-
     return [this.accessoryInformation, this.service];
   }
 }
