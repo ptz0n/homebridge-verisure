@@ -85,9 +85,10 @@ class DoorLock extends VerisureAccessory {
         throw error;
       })
       .then(() => {
-        this.service.setCharacteristic(this.homebridge.hap.Characteristic.LockCurrentState, value);
+        const { LockCurrentState } = this.homebridge.hap.Characteristic;
+        this.service.setCharacteristic(LockCurrentState, value);
         this.value = value;
-        callback(null);
+        callback(null, value);
       })
       .catch(callback);
   }

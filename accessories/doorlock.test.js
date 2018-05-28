@@ -100,8 +100,9 @@ describe('DoorLock', () => {
       result: 'SOMETHING_ELSE',
     });
 
-    doorLock.setTargetLockState(LockTargetState.SECURED, (error) => {
+    doorLock.setTargetLockState(LockTargetState.SECURED, (error, value) => {
       expect(error).toBeNull();
+      expect(value).toBe(LockTargetState.SECURED);
       const { calls } = installation.client.mock;
       expect(calls.length).toBe(3);
       done();
