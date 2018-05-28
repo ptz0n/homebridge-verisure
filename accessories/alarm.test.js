@@ -18,6 +18,8 @@ describe('Alarm', () => {
   const { SecuritySystemCurrentState } = hap.Characteristic;
   const alarm = new Alarm(homebridge, logger, config, installation, platformConfig);
 
+  alarm.getServices();
+
   it('setup name and value', () => {
     expect(alarm.name).toBe('Alarm (Kungsgatan)');
     expect(alarm.value).toBe(SecuritySystemCurrentState.DISARMED);
@@ -44,6 +46,23 @@ describe('Alarm', () => {
       },
     });
     alarm.getCurrentAlarmState((error, value) => {
+      expect(error).toBeNull();
+      expect(value).toBe(SecuritySystemCurrentState.AWAY_ARM);
+      done();
+    });
+  });
+
+  it('sets target arm state', (done) => {
+    expect.assertions(2);
+    installation.client = jest.fn();
+    installation.client.mockResolvedValueOnce({
+      doorLockStateChangeTransactionId: 'asd123',
+    });
+    installation.client.mockResolvedValueOnce({
+      result: 'SOME_RESULT',
+    });
+
+    alarm.setTargetAlarmState(SecuritySystemCurrentState.AWAY_ARM, (error, value) => {
       expect(error).toBeNull();
       expect(value).toBe(SecuritySystemCurrentState.AWAY_ARM);
       done();

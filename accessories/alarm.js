@@ -72,10 +72,10 @@ class Alarm extends VerisureAccessory {
       .then(({ armStateChangeTransactionId }) =>
         this.resolveChangeResult(`/code/result/${armStateChangeTransactionId}`))
       .then(() => {
-        const { Characteristic } = this.homebridge.hap;
-        this.service.setCharacteristic(Characteristic.SecuritySystemCurrentState, value);
+        const { SecuritySystemCurrentState } = this.homebridge.hap.Characteristic;
+        this.service.setCharacteristic(SecuritySystemCurrentState, value);
         this.value = value;
-        callback(null);
+        callback(null, value);
       })
       .catch(callback);
   }
