@@ -11,9 +11,12 @@ class Alarm extends VerisureAccessory {
 
     const { SecuritySystemCurrentState } = this.homebridge.hap.Characteristic;
     this.armStateMap = {
-      ARMED_AWAY: SecuritySystemCurrentState.AWAY_ARM,
-      ARMED_HOME: SecuritySystemCurrentState.STAY_ARM,
-      DISARMED: SecuritySystemCurrentState.DISARMED,
+      ARMED_AWAY: [SecuritySystemCurrentState.AWAY_ARM],
+      ARMED_HOME: [
+        SecuritySystemCurrentState.STAY_ARM,
+        SecuritySystemCurrentState.NIGHT_ARM,
+      ],
+      DISARMED: [SecuritySystemCurrentState.DISARMED],
     };
 
     this.value = this.resolveArmState(this.config.statusType);
@@ -26,12 +29,12 @@ class Alarm extends VerisureAccessory {
 
     // Verisure to HAP
     if (typeof input === 'string') {
-      output = this.armStateMap[input];
+      [output] = this.armStateMap[input];
     }
 
     // HAP to Verisure
     if (typeof input === 'number') {
-      output = Object.keys(this.armStateMap).find(key => this.armStateMap[key] === input);
+      output = Object.keys(this.armStateMap).find(key => this.armStateMap[key].includes(input));
     }
 
     if (typeof output === 'undefined') {

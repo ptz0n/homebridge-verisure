@@ -24,13 +24,14 @@ describe('Alarm', () => {
   });
 
   it('resolves arm states', () => {
-    expect(alarm.resolveArmState('DISARMED')).toBe(SecuritySystemCurrentState.DISARMED);
     expect(alarm.resolveArmState('ARMED_AWAY')).toBe(SecuritySystemCurrentState.AWAY_ARM);
     expect(alarm.resolveArmState('ARMED_HOME')).toBe(SecuritySystemCurrentState.STAY_ARM);
+    expect(alarm.resolveArmState('DISARMED')).toBe(SecuritySystemCurrentState.DISARMED);
 
-    expect(alarm.resolveArmState(SecuritySystemCurrentState.DISARMED)).toBe('DISARMED');
     expect(alarm.resolveArmState(SecuritySystemCurrentState.AWAY_ARM)).toBe('ARMED_AWAY');
+    expect(alarm.resolveArmState(SecuritySystemCurrentState.NIGHT_ARM)).toBe('ARMED_HOME');
     expect(alarm.resolveArmState(SecuritySystemCurrentState.STAY_ARM)).toBe('ARMED_HOME');
+    expect(alarm.resolveArmState(SecuritySystemCurrentState.DISARMED)).toBe('DISARMED');
 
     expect(() => alarm.resolveArmState('FOOBAR')).toThrow();
   });
