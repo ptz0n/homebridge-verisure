@@ -21,7 +21,7 @@
     "homebridge": ">=0.2.0"
   },
   "dependencies": {
-    "verisure": "^2.3.0"
+    "verisure": "^2.4.0"
   },
   "devDependencies": {
     "eslint": "^4.13.1",
