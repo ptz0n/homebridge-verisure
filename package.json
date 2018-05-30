@@ -11,7 +11,7 @@
     "url": "git://github.com/ptz0n/homebridge-verisure.git"
   },
   "scripts": {
-    "test": "eslint **/*.js && jest --env=node --coverage --forceExit"
+    "test": "eslint *.js **/*.js && jest --env=node --coverage --forceExit"
   },
   "bugs": {
     "url": "http://github.com/ptz0n/homebridge-verisure/issues"
