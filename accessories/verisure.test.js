@@ -7,7 +7,7 @@ describe('Verisure', () => {
   const config = { deviceLabel: 'ASD123' };
   const installation = { client: null };
 
-  const verisure = new Verisure(homebridge, null, config, installation);
+  const verisure = new Verisure(homebridge, jest.fn(), config, installation);
 
   it('get lock state change result', () => {
     expect.assertions(5);
