@@ -97,12 +97,14 @@ describe('DoorLock', () => {
       result: 'NO_DATA',
     });
     installation.client.mockResolvedValueOnce({
-      result: 'SOMETHING_ELSE',
+      result: 'OK',
     });
 
     doorLock.setTargetLockState(LockTargetState.SECURED, (error, value) => {
       expect(error).toBeNull();
       expect(value).toBe(LockTargetState.SECURED);
+      expect(doorLock.service.getCharacteristic(LockCurrentState).value)
+        .toBe(LockTargetState.SECURED);
       const { calls } = installation.client.mock;
       expect(calls.length).toBe(3);
       done();
@@ -115,6 +117,8 @@ describe('DoorLock', () => {
 
     doorLock.setTargetLockState(LockTargetState.SECURED, (error) => {
       expect(error).toBeNull();
+      expect(doorLock.service.getCharacteristic(LockCurrentState).value)
+        .toBe(LockTargetState.SECURED);
       done();
     });
   });
