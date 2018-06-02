@@ -6,7 +6,7 @@ class DoorLock extends VerisureAccessory {
 
     const { doorcode, doorCode } = this.platformConfig;
     this.doorCode = doorcode || doorCode;
-    this.name = VerisureAccessory.getUniqueAccessoryName(`SmartLock (${this.config.deviceArea})`);
+    this.name = VerisureAccessory.getUniqueAccessoryName(`SmartLock (${this.config.area})`);
     this.value = this.resolveCurrentLockState(this.config);
 
     // TODO: Init polling for externally invoked state changes.

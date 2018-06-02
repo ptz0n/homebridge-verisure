@@ -6,7 +6,7 @@ describe('DoorLock', () => {
   const homebridge = { hap };
   const logger = jest.fn();
   const config = {
-    deviceArea: 'Entré',
+    area: 'Entré',
     deviceLabel: '1234',
   };
   const installation = {
