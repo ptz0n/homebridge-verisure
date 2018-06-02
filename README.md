@@ -28,7 +28,7 @@ snippet below.
 ## Configuration
 
 As part of your configuration, add an object with your Verisure credentials to
-your array (list) of enabled platform plugins.
+your array (list) of enabled platform plugins. Example config:
 
 ```json
 "platforms": [
@@ -42,3 +42,8 @@ your array (list) of enabled platform plugins.
   }
 ]
 ```
+
+* __`email`__ Required string containing your Verisure account email address.
+* __`password`__ Required string containing your Verisure account password.
+* `alarmCode` Optional string containing your security system alarm code.
+* `doorCode` Optional string containing your door lock code.
