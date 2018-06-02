@@ -44,7 +44,7 @@ class VerisurePlatform {
         return;
       }
 
-      if (deviceType === 'doorLock' && (!this.config.doorcode || !this.config.doorCode)) {
+      if (deviceType === 'doorLock' && !this.config.doorcode && !this.config.doorCode) {
         return;
       }
 
