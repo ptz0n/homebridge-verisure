@@ -9,7 +9,7 @@
 
 * Added support for security system.
 * Added support for contact sensors.
-* Added support for all climate sensors.
+* Added humidity service to supported climate sensors.
 
 ## Config
 
