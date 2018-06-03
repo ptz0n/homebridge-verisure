@@ -10,6 +10,7 @@ describe('ClimateSensor', () => {
     deviceLabel: 'asd123',
     deviceType: 'SMOKE2',
     temperature: 22,
+    humidity: 55,
   };
   const installation = {
     getOverview: null,
@@ -20,24 +21,40 @@ describe('ClimateSensor', () => {
 
   it('setup name and value', () => {
     expect(climateSensor.name).toBe('Rökdetektor (Hallway)');
-    expect(climateSensor.value).toBe(22);
   });
 
   it('gets current temperature', (done) => {
-    expect.assertions(3);
+    expect.assertions(2);
 
     installation.getOverview = jest.fn();
     installation.getOverview.mockResolvedValueOnce({
       climateValues: [{
-        temperature: 22.5,
         deviceLabel: 'asd123',
+        temperature: 22.5,
       }],
     });
 
-    climateSensor.getCurrentTemperature((error, value) => {
+    climateSensor.getCurrentPropertyValue('temperature', (error, value) => {
       expect(error).toBeNull();
       expect(value).toBe(22.5);
-      expect(climateSensor.value).toBe(22.5);
+      done();
+    });
+  });
+
+  it('gets current relative humidity', (done) => {
+    expect.assertions(2);
+
+    installation.getOverview = jest.fn();
+    installation.getOverview.mockResolvedValueOnce({
+      climateValues: [{
+        deviceLabel: 'asd123',
+        humidity: 62,
+      }],
+    });
+
+    climateSensor.getCurrentPropertyValue('humidity', (error, value) => {
+      expect(error).toBeNull();
+      expect(value).toBe(62);
       done();
     });
   });
@@ -49,9 +66,20 @@ describe('ClimateSensor', () => {
     expect(anotherClimateSensor.name).toBe('FOOBAR (Kitchen)');
   });
 
-  it('expose services', () => {
-    const services = climateSensor.getServices();
-    expect(services.length).toBe(2);
+  it('expose only accessory & temp service', () => {
+    const tempConfig = {
+      deviceLabel: 'asd234',
+      temperature: 22,
+    };
+    const tempSensor = new ClimateSensor(homebridge, logger, tempConfig, installation);
+    const services = tempSensor.getServices();
     expect(Array.isArray(services)).toBe(true);
+    expect(services.length).toBe(2);
+  });
+
+  it('expose all services', () => {
+    const services = climateSensor.getServices();
+    expect(Array.isArray(services)).toBe(true);
+    expect(services.length).toBe(3);
   });
 });
