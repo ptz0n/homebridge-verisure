@@ -21,10 +21,9 @@ describe('DoorLock', () => {
 
   doorLock.getServices();
 
-  it('setup name, code and value', () => {
+  it('setup name and code', () => {
     expect(doorLock.name).toBe('SmartLock (Entré)');
     expect(doorLock.doorCode).toBe('000000');
-    expect(doorLock.value).toBe(LockCurrentState.UNSECURED);
   });
 
   it('resolves jammed lock state', () => {
@@ -45,21 +44,21 @@ describe('DoorLock', () => {
     expect(state).toBe(LockCurrentState.JAMMED);
   });
 
-  it('gets and updates lock state', (done) => {
-    expect.assertions(3);
+  it('gets lock state', (done) => {
+    expect.assertions(2);
     installation.client = () => Promise.resolve([{
       currentLockState: 'LOCKED',
       deviceLabel: doorLock.serialNumber,
     }]);
     doorLock.getCurrentLockState((error, value) => {
-      expect(error).toBeNull();
+      expect(error).toBeFalsy();
       expect(value).toBe(LockCurrentState.SECURED);
-      expect(doorLock.value).toBe(LockCurrentState.SECURED);
       done();
     });
   });
 
   it('errors when not able to get lock state', (done) => {
+    expect.assertions(4);
     installation.client = () => Promise.resolve([{
       currentLockState: 'LOCKED',
       deviceLabel: 'NOT MATCHING LABEL',
@@ -76,6 +75,7 @@ describe('DoorLock', () => {
 
   it('gets target lock state', (done) => {
     expect.assertions(2);
+    expect.assertions(2);
     installation.client = () => Promise.resolve([{
       currentLockState: 'UNLOCKED',
       deviceLabel: doorLock.serialNumber,
@@ -89,6 +89,7 @@ describe('DoorLock', () => {
   });
 
   it('sets target lock state', (done) => {
+    expect.assertions(3);
     installation.client = jest.fn();
     installation.client.mockResolvedValueOnce({
       doorLockStateChangeTransactionId: 'asd123',
@@ -100,30 +101,37 @@ describe('DoorLock', () => {
       result: 'OK',
     });
 
-    doorLock.setTargetLockState(LockTargetState.SECURED, (error, value) => {
-      expect(error).toBeNull();
-      expect(value).toBe(LockTargetState.SECURED);
-      expect(doorLock.service.getCharacteristic(LockCurrentState).value)
-        .toBe(LockTargetState.SECURED);
+    doorLock.setTargetLockState(LockTargetState.SECURED, (error) => {
+      expect(error).toBeFalsy();
       const { calls } = installation.client.mock;
       expect(calls.length).toBe(3);
-      done();
+
+      setTimeout(() => { // Wait for setImmediate
+        expect(doorLock.service.getCharacteristic(LockCurrentState).value)
+          .toBe(LockTargetState.SECURED);
+        done();
+      }, 100);
     });
   });
 
   it('sets target lock state to same as current state', (done) => {
+    expect.assertions(2);
     installation.client = jest.fn();
     installation.client.mockRejectedValue({ errorCode: 'VAL_00819' });
 
     doorLock.setTargetLockState(LockTargetState.SECURED, (error) => {
-      expect(error).toBeNull();
-      expect(doorLock.service.getCharacteristic(LockCurrentState).value)
-        .toBe(LockTargetState.SECURED);
-      done();
+      expect(error).toBeFalsy();
+
+      setTimeout(() => { // Wait for setImmediate
+        expect(doorLock.service.getCharacteristic(LockCurrentState).value)
+          .toBe(LockTargetState.SECURED);
+        done();
+      }, 100);
     });
   });
 
   it('handles error when setting lock state', (done) => {
+    expect.assertions(1);
     installation.client = jest.fn();
     installation.client.mockRejectedValue({ errorCode: 'VAL_1337' });
 

@@ -20,9 +20,8 @@ describe('Alarm', () => {
 
   alarm.getServices();
 
-  it('setup name and value', () => {
+  it('setup name', () => {
     expect(alarm.name).toBe('Alarm (Kungsgatan)');
-    expect(alarm.value).toBe(SecuritySystemCurrentState.DISARMED);
   });
 
   it('resolves arm states', () => {
@@ -39,6 +38,7 @@ describe('Alarm', () => {
   });
 
   it('requests current arm state', (done) => {
+    expect.assertions(2);
     installation.getOverview = jest.fn();
     installation.getOverview.mockResolvedValueOnce({
       armState: {
@@ -46,7 +46,7 @@ describe('Alarm', () => {
       },
     });
     alarm.getCurrentAlarmState((error, value) => {
-      expect(error).toBeNull();
+      expect(error).toBeFalsy();
       expect(value).toBe(SecuritySystemCurrentState.AWAY_ARM);
       done();
     });
@@ -59,13 +59,17 @@ describe('Alarm', () => {
       doorLockStateChangeTransactionId: 'asd123',
     });
     installation.client.mockResolvedValueOnce({
-      result: 'SOME_RESULT',
+      result: 'OK',
     });
 
-    alarm.setTargetAlarmState(SecuritySystemCurrentState.AWAY_ARM, (error, value) => {
-      expect(error).toBeNull();
-      expect(value).toBe(SecuritySystemCurrentState.AWAY_ARM);
-      done();
+    alarm.setTargetAlarmState(SecuritySystemCurrentState.AWAY_ARM, (error) => {
+      expect(error).toBeFalsy();
+
+      setTimeout(() => { // Wait for setImmediate
+        expect(alarm.service.getCharacteristic(SecuritySystemCurrentState).value)
+          .toBe(SecuritySystemCurrentState.AWAY_ARM);
+        done();
+      }, 100);
     });
   });
 });

@@ -18,10 +18,6 @@ class Alarm extends VerisureAccessory {
       ],
       DISARMED: [SecuritySystemCurrentState.DISARMED],
     };
-
-    this.value = this.resolveArmState(this.config.statusType);
-
-    // TODO: Init polling for externally invoked state changes.
   }
 
   resolveArmState(input) {
@@ -49,12 +45,9 @@ class Alarm extends VerisureAccessory {
 
     this.installation.getOverview()
       .then((overview) => {
-        this.value = this.resolveArmState(overview.armState.statusType);
-        callback(null, this.value);
+        callback(null, this.resolveArmState(overview.armState.statusType));
       })
-      .catch((error) => {
-        callback(error);
-      });
+      .catch(callback);
   }
 
   setTargetAlarmState(value, callback) {
@@ -72,10 +65,12 @@ class Alarm extends VerisureAccessory {
       .then(({ armStateChangeTransactionId }) =>
         this.resolveChangeResult(`/code/result/${armStateChangeTransactionId}`))
       .then(() => {
-        const { SecuritySystemCurrentState } = this.homebridge.hap.Characteristic;
-        this.service.updateCharacteristic(SecuritySystemCurrentState, value);
-        this.value = value;
-        callback(null, value);
+        callback(); // Successful action.
+
+        setImmediate(() => {
+          const { SecuritySystemCurrentState } = this.homebridge.hap.Characteristic;
+          this.service.setCharacteristic(SecuritySystemCurrentState, value);
+        });
       })
       .catch(callback);
   }
@@ -94,6 +89,8 @@ class Alarm extends VerisureAccessory {
       .on('set', this.setTargetAlarmState.bind(this));
 
     this.accessoryInformation.setCharacteristic(Characteristic.Model, this.model);
+
+    // TODO: Init polling for externally invoked state changes.
 
     return [this.accessoryInformation, this.service];
   }

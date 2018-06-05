@@ -7,9 +7,6 @@ class DoorLock extends VerisureAccessory {
     const { doorcode, doorCode } = this.platformConfig;
     this.doorCode = doorcode || doorCode;
     this.name = VerisureAccessory.getUniqueAccessoryName(`SmartLock (${this.config.area})`);
-    this.value = this.resolveCurrentLockState(this.config);
-
-    // TODO: Init polling for externally invoked state changes.
   }
 
   resolveCurrentLockState(doorLock) {
@@ -43,9 +40,10 @@ class DoorLock extends VerisureAccessory {
   getCurrentLockState(callback) {
     this.log('Getting current lock state.');
 
+    // TODO: Use this.cachedValue, if available?
+
     this.getDoorLockState().then((doorLock) => {
-      this.value = this.resolveCurrentLockState(doorLock);
-      callback(null, this.value);
+      callback(null, this.resolveCurrentLockState(doorLock));
     }).catch(callback);
   }
 
@@ -79,16 +77,18 @@ class DoorLock extends VerisureAccessory {
         this.resolveChangeResult(`/doorlockstate/change/result/${doorLockStateChangeTransactionId}`))
       .catch((error) => {
         if (error.errorCode === 'VAL_00819') {
-          // Lock at desired state.
-          return true;
+          return true; // Lock at desired state.
         }
         throw error;
       })
       .then(() => {
-        const { LockCurrentState } = this.homebridge.hap.Characteristic;
-        this.service.updateCharacteristic(LockCurrentState, value);
-        this.value = value;
-        callback(null, value);
+        callback(); // Successful action.
+
+        setImmediate(() => {
+          const { LockCurrentState } = this.homebridge.hap.Characteristic;
+          this.service.setCharacteristic(LockCurrentState, value);
+        });
+        // TODO: Set this.cachedValue with TTL?
       })
       .catch(callback);
   }
@@ -100,10 +100,13 @@ class DoorLock extends VerisureAccessory {
     this.service
       .getCharacteristic(Characteristic.LockCurrentState)
       .on('get', this.getCurrentLockState.bind(this));
+
     this.service
       .getCharacteristic(Characteristic.LockTargetState)
       .on('get', this.getTargetLockState.bind(this))
       .on('set', this.setTargetLockState.bind(this));
+
+    // TODO: Init polling for externally invoked state changes.
 
     return [this.accessoryInformation, this.service];
   }
