@@ -7,3 +7,4 @@
 coverage
 Makefile
 test
+yarn.lock
