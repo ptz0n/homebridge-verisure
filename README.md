@@ -1,15 +1,20 @@
 # homebridge-verisure
 
-This is a plugin for [homebridge](https://github.com/nfarina/homebridge). It's a
-working implementation for several Verisure devices:
+[![Greenkeeper badge](https://badges.greenkeeper.io/ptz0n/homebridge-verisure.svg)](https://greenkeeper.io/)
 
-- [x] __DOORLOCK__ - Yale Doorman Lock/Unlock
-- [x] __HUMIDITY1__ - Temperature
-- [x] __SIREN1__ - Temperature
-- [x] __SMARTCAMERA1__ - Temperature
-- [x] __SMARTPLUG__ - State, on, off
-- [x] __SMOKE2__ - Temperature
-- [x] __VOICEBOX1__ - Temperature
+[![](https://travis-ci.org/ptz0n/homebridge-verisure.svg?branch=master)](https://travis-ci.org/ptz0n/homebridge-verisure)
+
+This is a plugin for [homebridge](https://github.com/nfarina/homebridge). It's
+an implementation for your Verisure installation and exposes the following devices:
+
+- Climate sensor
+- Magnetic contact
+- Night Control
+- Siren
+- SmartLock
+- SmartPlug
+- Smoke detector
+- Vibration detector
 
 ## Installation
 
@@ -23,7 +28,7 @@ snippet below.
 ## Configuration
 
 As part of your configuration, add an object with your Verisure credentials to
-your array (list) of enabled platform plugins.
+your array (list) of enabled platform plugins. Example config:
 
 ```json
 "platforms": [
@@ -32,7 +37,13 @@ your array (list) of enabled platform plugins.
     "name" : "Verisure",
     "email": "your@email.com",
     "password": "yourT0p5ecre7Passw0rd",
-    "doorcode": "000000"
+    "alarmCode": "0000",
+    "doorCode": "000000"
   }
 ]
 ```
+
+* __`email`__ Required string containing your Verisure account email address.
+* __`password`__ Required string containing your Verisure account password.
+* `alarmCode` Optional string containing your security system alarm code.
+* `doorCode` Optional string containing your door lock code.

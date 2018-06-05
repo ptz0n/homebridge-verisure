@@ -1,0 +1,22 @@
+{
+  "Climate sensor": "Klimatdetektor",
+  "Heat pump": "Värmepump",
+  "Keypad": "Manöverpanel",
+  "Magnetic contact": "Dörr-/fönsterdetektor",
+  "Motion detector": "Rörelsedetektor",
+  "Mouse detector": "Musdetektor",
+  "Night Control": "Trygghetspanel",
+  "Siren": "Inomhussiren med värmedetektor",
+  "SmartCam": "Smart kamera",
+  "SmartLock": "Smart lås",
+  "SmartPlug": "Smart plug",
+  "Smoke detector": "Rökdetektor",
+  "VBox Micro": "Microenhet",
+  "VBox Mini": "Minienhet",
+  "VBox Pro": "Huvudenhet",
+  "VBox": "Huvudenhet",
+  "Vibration detector": "Vibrationsdetektor",
+  "VoiceBox": "Röstenhet",
+  "Water detector with cable": "Vattendetektor med kabel",
+  "Water detector": "Vattendetektor"
+}

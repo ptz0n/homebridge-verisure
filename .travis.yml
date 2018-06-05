@@ -1,0 +1,17 @@
+language: node_js
+
+node_js:
+  - node
+  - 9
+  - 8
+  - 7
+  - 6
+
+before_install:
+  - sudo apt-get install libavahi-compat-libdnssd-dev
+
+cache:
+  directories:
+    - node_modules
+
+sudo: false

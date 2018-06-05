@@ -1,6 +1,6 @@
 {
   "name": "homebridge-verisure",
-  "version": "1.6.0",
+  "version": "1.7.0-rc.3",
   "description": "Verisure plugin for homebridge: https://github.com/nfarina/homebridge",
   "license": "MIT",
   "keywords": [
@@ -10,14 +10,25 @@
     "type": "git",
     "url": "git://github.com/ptz0n/homebridge-verisure.git"
   },
+  "scripts": {
+    "test": "eslint *.js **/*.js && jest --env=node --coverage --forceExit"
+  },
   "bugs": {
     "url": "http://github.com/ptz0n/homebridge-verisure/issues"
   },
   "engines": {
-    "node": ">=0.12.0",
+    "node": ">=6",
     "homebridge": ">=0.2.0"
   },
   "dependencies": {
-    "verisure": "^1.2.0"
+    "verisure": "^2.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.13.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jest": "^21.5.0",
+    "hap-nodejs": "^0.4.46",
+    "jest": "^22.0.3"
   }
 }
