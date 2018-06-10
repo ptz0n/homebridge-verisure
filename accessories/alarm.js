@@ -79,7 +79,7 @@ class Alarm extends VerisureAccessory {
     const { Service, Characteristic } = this.homebridge.hap;
 
     this.service = new Service.SecuritySystem(this.name);
-    this.service
+    const currentStateCharacteristic = this.service
       .getCharacteristic(Characteristic.SecuritySystemCurrentState)
       .on('get', this.getCurrentAlarmState.bind(this));
 
@@ -90,7 +90,7 @@ class Alarm extends VerisureAccessory {
 
     this.accessoryInformation.setCharacteristic(Characteristic.Model, this.model);
 
-    // TODO: Init polling for externally invoked state changes.
+    this.pollCharacteristics.push(currentStateCharacteristic);
 
     return [this.accessoryInformation, this.service];
   }

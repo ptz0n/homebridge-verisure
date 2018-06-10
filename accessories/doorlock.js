@@ -4,8 +4,7 @@ class DoorLock extends VerisureAccessory {
   constructor(...args) {
     super(...args);
 
-    const { doorcode, doorCode } = this.platformConfig;
-    this.doorCode = doorcode || doorCode;
+    this.doorCode = this.platformConfig.doorCode;
     this.name = VerisureAccessory.getUniqueAccessoryName(`SmartLock (${this.config.area})`);
   }
 
@@ -67,9 +66,7 @@ class DoorLock extends VerisureAccessory {
     const request = {
       method: 'PUT',
       uri: `/device/${this.serialNumber}/${value ? 'lock' : 'unlock'}`,
-      json: {
-        code: this.doorCode,
-      },
+      json: { code: this.doorCode },
     };
 
     this.installation.client(request)
@@ -97,7 +94,7 @@ class DoorLock extends VerisureAccessory {
     const { Service, Characteristic } = this.homebridge.hap;
 
     this.service = new Service.LockMechanism(this.name);
-    this.service
+    const currentStateCharacteristic = this.service
       .getCharacteristic(Characteristic.LockCurrentState)
       .on('get', this.getCurrentLockState.bind(this));
 
@@ -106,7 +103,7 @@ class DoorLock extends VerisureAccessory {
       .on('get', this.getTargetLockState.bind(this))
       .on('set', this.setTargetLockState.bind(this));
 
-    // TODO: Init polling for externally invoked state changes.
+    this.pollCharacteristics.push(currentStateCharacteristic);
 
     return [this.accessoryInformation, this.service];
   }

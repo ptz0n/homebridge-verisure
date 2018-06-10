@@ -38,7 +38,8 @@ your array (list) of enabled platform plugins. Example config:
     "email": "your@email.com",
     "password": "yourT0p5ecre7Passw0rd",
     "alarmCode": "0000",
-    "doorCode": "000000"
+    "doorCode": "000000",
+    "pollInterval": 60
   }
 ]
 ```
@@ -47,3 +48,4 @@ your array (list) of enabled platform plugins. Example config:
 * __`password`__ Required string containing your Verisure account password.
 * `alarmCode` Optional string containing your security system alarm code.
 * `doorCode` Optional string containing your door lock code.
+* `pollInterval` Optional integer containing poll interval in seconds. Defaults to `60`.

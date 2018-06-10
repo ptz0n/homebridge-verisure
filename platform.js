@@ -10,11 +10,25 @@ class VerisurePlatform {
       throw Error('Module not initiated.');
     }
 
-    this.config = config;
+    const {
+      alarmCode,
+      doorcode, doorCode,
+      email,
+      password,
+      pollInterval = 60,
+    } = config;
+    this.config = {
+      alarmCode,
+      doorCode: doorcode || doorCode,
+      email,
+      password,
+      pollInterval,
+    };
+
     this.homebridge = homebridge;
     this.logger = logger;
 
-    this.verisure = new Verisure(this.config.email, config.password);
+    this.verisure = new Verisure(email, password);
   }
 
   static init(homebridgeRef) {
