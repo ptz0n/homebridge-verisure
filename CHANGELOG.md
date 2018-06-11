@@ -1,3 +1,9 @@
+## 1.8.0 (Jun 11, 2018)
+
+### Accessories
+
+* Poll alarm and door lock accessories for current state.
+
 ## 1.7.0 (Jun 5, 2018)
 
 ### Refactor
