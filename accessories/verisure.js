@@ -12,6 +12,7 @@ class VerisureAccessory {
 
     this.value = null;
     this.service = null;
+    this.pollCharacteristics = [];
 
     const { Characteristic, Service } = homebridge.hap;
 
@@ -19,6 +20,12 @@ class VerisureAccessory {
     this.accessoryInformation
       .setCharacteristic(Characteristic.Manufacturer, 'Verisure')
       .setCharacteristic(Characteristic.SerialNumber, this.serialNumber);
+
+    if (platformConfig && platformConfig.pollInterval) {
+      setInterval(() => {
+        this.pollCharacteristics.forEach(characteristic => characteristic.getValue());
+      }, platformConfig.pollInterval * 1000);
+    }
   }
 
   static getUniqueAccessoryName(name) {
