@@ -32,9 +32,11 @@ class ContactSensor extends VerisureAccessory {
     const { Service, Characteristic } = this.homebridge.hap;
 
     this.service = new Service.ContactSensor(this.name);
-    this.service
+    const currentStateCharacteristic = this.service
       .getCharacteristic(Characteristic.ContactSensorState)
       .on('get', this.getCurrentSensorState.bind(this));
+
+    this.pollCharacteristics.push(currentStateCharacteristic);
 
     return [this.accessoryInformation, this.service];
   }
