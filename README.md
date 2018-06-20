@@ -7,6 +7,7 @@
 This is a plugin for [homebridge](https://github.com/nfarina/homebridge). It's
 an implementation for your Verisure installation and exposes the following devices:
 
+- Security alarm
 - Climate sensor
 - Magnetic contact
 - Night Control
