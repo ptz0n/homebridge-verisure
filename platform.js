@@ -79,9 +79,12 @@ class VerisurePlatform {
   accessories(callback) {
     this.verisure.getToken()
       .then(() => this.verisure.getInstallations(), (error) => { throw Error(error); })
-      .then(installations =>
-        Promise.all(installations.map(installation =>
-          Promise.all([installation, installation.getOverview()]))))
+      .then(installations => Promise.all(
+        installations.map(installation => Promise.all([
+          installation,
+          installation.getOverview(),
+        ]))
+      ))
       .then((overviews) => {
         const accessoryLists = overviews.map(this.overviewToAccessories.bind(this));
         callback(accessoryLists.reduce((a, b) => [...a, ...b]));

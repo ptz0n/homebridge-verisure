@@ -15,8 +15,8 @@ class DoorLock extends VerisureAccessory {
       return LockCurrentState.JAMMED;
     }
 
-    return doorLock.currentLockState === 'LOCKED' ?
-      LockCurrentState.SECURED : LockCurrentState.UNSECURED;
+    return doorLock.currentLockState === 'LOCKED'
+      ? LockCurrentState.SECURED : LockCurrentState.UNSECURED;
   }
 
   getDoorLockState() {
@@ -25,9 +25,7 @@ class DoorLock extends VerisureAccessory {
     };
 
     return this.installation.client(request)
-      .then(doorLocks =>
-        doorLocks.find(doorLock =>
-          doorLock.deviceLabel === this.serialNumber))
+      .then(doorLocks => doorLocks.find(doorLock => doorLock.deviceLabel === this.serialNumber))
       .then((doorLock) => {
         if (!doorLock) {
           throw Error(`Could not find lock state for ${this.name}.`);
@@ -53,10 +51,10 @@ class DoorLock extends VerisureAccessory {
       const { LockTargetState } = this.homebridge.hap.Characteristic;
       const { pendingLockState, currentLockState } = doorLock;
 
-      const targetLockState = pendingLockState === 'NONE' ?
-        currentLockState : pendingLockState;
-      callback(null, targetLockState === 'LOCKED' ?
-        LockTargetState.SECURED : LockTargetState.UNSECURED);
+      const targetLockState = pendingLockState === 'NONE'
+        ? currentLockState : pendingLockState;
+      callback(null, targetLockState === 'LOCKED'
+        ? LockTargetState.SECURED : LockTargetState.UNSECURED);
     }).catch(callback);
   }
 
@@ -70,8 +68,7 @@ class DoorLock extends VerisureAccessory {
     };
 
     this.installation.client(request)
-      .then(({ doorLockStateChangeTransactionId }) =>
-        this.resolveChangeResult(`/doorlockstate/change/result/${doorLockStateChangeTransactionId}`))
+      .then(({ doorLockStateChangeTransactionId }) => this.resolveChangeResult(`/doorlockstate/change/result/${doorLockStateChangeTransactionId}`))
       .catch((error) => {
         if (error.errorCode === 'VAL_00819') {
           return true; // Lock at desired state.

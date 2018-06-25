@@ -18,9 +18,8 @@ class ContactSensor extends VerisureAccessory {
     this.log('Getting current sensor state.');
 
     this.installation.getOverview()
-      .then(overview =>
-        overview.doorWindow.doorWindowDevice.find(device =>
-          device.deviceLabel === this.serialNumber))
+      .then(overview => overview.doorWindow.doorWindowDevice
+        .find(device => device.deviceLabel === this.serialNumber))
       .then((device) => {
         this.value = ContactSensor.resolveSensorState(device.state);
         callback(null, this.value);
