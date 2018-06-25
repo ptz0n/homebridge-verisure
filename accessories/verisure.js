@@ -44,8 +44,10 @@ class VerisureAccessory {
     return this.installation.client({ uri }).then(({ result }) => {
       this.log(`Got "${result}" back from: ${uri}`);
       if (typeof result === 'undefined' || result === 'NO_DATA') {
-        return new Promise(resolve => setTimeout(() =>
-          resolve(this.resolveChangeResult(uri)), 200));
+        return new Promise(resolve => setTimeout(
+          () => resolve(this.resolveChangeResult(uri)),
+          200
+        ));
       }
       return result;
     });

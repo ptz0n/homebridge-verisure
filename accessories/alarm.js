@@ -62,8 +62,7 @@ class Alarm extends VerisureAccessory {
       },
     };
     this.installation.client(request)
-      .then(({ armStateChangeTransactionId }) =>
-        this.resolveChangeResult(`/code/result/${armStateChangeTransactionId}`))
+      .then(({ armStateChangeTransactionId }) => this.resolveChangeResult(`/code/result/${armStateChangeTransactionId}`))
       .then(() => {
         callback(); // Successful action.
 

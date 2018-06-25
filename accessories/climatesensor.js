@@ -28,9 +28,8 @@ class ClimateSensor extends VerisureAccessory {
     this.log(`Getting current ${property} value.`);
 
     this.installation.getOverview()
-      .then(overview =>
-        overview.climateValues.find(device =>
-          device.deviceLabel === this.serialNumber))
+      .then(overview => overview.climateValues
+        .find(device => device.deviceLabel === this.serialNumber))
       .then((device) => {
         callback(null, device[property]);
       })
