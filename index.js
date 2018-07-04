@@ -1,4 +1,4 @@
-const VerisurePlatform = require('./platform');
+const VerisurePlatform = require('./lib/platform');
 
 module.exports = (homebridge) => {
   VerisurePlatform.init(homebridge);
