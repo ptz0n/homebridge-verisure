@@ -1,3 +1,15 @@
+## 1.9.1 (Jul 5, 2018)
+
+### Accessories
+
+* When unable to set SmartPlug state, pass a correctly composed error object.
+
+## 1.9.0 (Jun 15, 2018)
+
+### Accessories
+
+* Poll for contact sensor state value.
+
 ## 1.8.0 (Jun 11, 2018)
 
 ### Accessories
