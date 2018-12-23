@@ -1,3 +1,9 @@
+## 1.9.2 (Dec 23, 2018)
+
+### Accessories
+
+* Set supported temperature range.
+
 ## 1.9.1 (Jul 5, 2018)
 
 ### Accessories
