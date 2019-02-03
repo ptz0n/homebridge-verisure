@@ -1,4 +1,14 @@
-## 1.10.0 (Dec 23, 2018)
+## 1.10.0 (Feb 3, 2019)
+
+### Accessories
+
+* Enable configuration of auto-lock via switch service.
+
+### Platform
+
+* Enable configuration using environment variables.
+
+## 1.9.2 (Dec 23, 2018)
 
 ### Accessories
 
