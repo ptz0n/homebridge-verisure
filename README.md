@@ -50,3 +50,12 @@ your array (list) of enabled platform plugins. Example config:
 * `alarmCode` Optional string containing your security system alarm code.
 * `doorCode` Optional string containing your door lock code.
 * `pollInterval` Optional integer containing poll interval in seconds. Defaults to `60`.
+
+### Environment variables
+
+For convenience, the following environment variables can be used instead of placing secrets in your `config.json`.
+
+* `VERISURE_ALARM_CODE`
+* `VERISURE_DOOR_CODE`
+* `VERISURE_EMAIL`
+* `VERISURE_PASSWORD`
