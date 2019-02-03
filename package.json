@@ -1,6 +1,6 @@
 {
   "name": "homebridge-verisure",
-  "version": "1.9.2",
+  "version": "1.10.0",
   "description": "Verisure plugin for homebridge: https://github.com/nfarina/homebridge",
   "license": "MIT",
   "keywords": [
