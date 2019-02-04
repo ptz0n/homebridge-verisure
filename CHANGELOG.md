@@ -1,3 +1,9 @@
+## 1.10.1 (Feb 4, 2019)
+
+### Accessories
+
+* Remove night arm from supported states.
+
 ## 1.10.0 (Feb 3, 2019)
 
 ### Accessories
