@@ -24,7 +24,7 @@
     "verisure": "^2.4.0"
   },
   "devDependencies": {
-    "eslint": "^5.0.1",
+    "eslint": "^5.14.0",
     "eslint-config-airbnb-base": "^13.0.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jest": "^22.1.3",
