@@ -4,7 +4,7 @@
 
 [![](https://travis-ci.org/ptz0n/homebridge-verisure.svg?branch=master)](https://travis-ci.org/ptz0n/homebridge-verisure)
 
-This is a plugin for [homebridge](https://github.com/nfarina/homebridge). It's
+This is a plugin for [Homebridge](https://github.com/nfarina/homebridge). It's
 an implementation for your Verisure installation and exposes the following devices:
 
 - Security alarm
@@ -16,6 +16,16 @@ an implementation for your Verisure installation and exposes the following devic
 - SmartPlug
 - Smoke detector
 - Vibration detector
+
+## Protect linked devices & accounts
+
+If configured, this plugin will expose your security system and door lock.
+Please protect you installation from unauthorised access:
+
+1. Generate a unique `pin` for your config. Never, ever use the default one.
+2. Lock all devices with access to your installation when not in use.
+3. Remove access from users that no longer need it.
+4. Keep your devices up to date.
 
 ## Installation
 
