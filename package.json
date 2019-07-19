@@ -17,14 +17,14 @@
     "url": "http://github.com/ptz0n/homebridge-verisure/issues"
   },
   "engines": {
-    "node": ">=6",
+    "node": ">=8",
     "homebridge": ">=0.2.0"
   },
   "dependencies": {
     "verisure": "^2.4.0"
   },
   "devDependencies": {
-    "eslint": "^5.14.0",
+    "eslint": "^6.0.1",
     "eslint-config-airbnb-base": "^13.0.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jest": "^22.10.0",
