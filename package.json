@@ -28,7 +28,7 @@
     "eslint-config-airbnb-base": "^13.0.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jest": "^22.14.1",
-    "hap-nodejs": "^0.4.46",
+    "hap-nodejs": "^0.5.0",
     "jest": "^23.1.0"
   }
 }
