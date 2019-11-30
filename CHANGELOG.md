@@ -1,3 +1,9 @@
+## 1.11.0 (Nov 30, 2019)
+
+### Dependencies
+
+* Bump `verisure` module.
+
 ## 1.10.1 (Feb 4, 2019)
 
 ### Accessories
