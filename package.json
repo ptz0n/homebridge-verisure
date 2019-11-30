@@ -24,11 +24,11 @@
     "verisure": "^3.0.0"
   },
   "devDependencies": {
-    "eslint": "^6.0.1",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-jest": "^22.15.1",
-    "hap-nodejs": "^0.5.0",
+    "eslint-plugin-jest": "^23.1.0",
+    "eslint": "^6.7.2",
+    "hap-nodejs": "^0.5.3",
     "jest": "^25.0.0"
   }
 }
