@@ -1,3 +1,9 @@
+## 1.12.0 (Nov 30, 2019)
+
+### Plugin
+
+* Add schema file for UI.
+
 ## 1.11.0 (Nov 30, 2019)
 
 ### Dependencies
