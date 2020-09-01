@@ -1,0 +1,38 @@
+{
+  "pluginAlias": "Verisure",
+  "pluginType": "platform",
+  "singular": false,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "email": {
+        "title": "E-mail",
+        "type": "string",
+        "required": true
+      },
+      "password": {
+        "title": "Password",
+        "type": "string",
+        "required": true
+      },
+      "alarmCode": {
+        "title": "Alarm Code",
+        "type": "string",
+        "required": false
+      },
+      "doorCode": {
+        "title": "Door Code",
+        "type": "string",
+        "required": false
+      },
+      "pollInterval": {
+        "title": "Poll interval",
+        "type": "integer",
+        "default": 60,
+        "required": false
+      }
+    }
+  },
+  "form": null,
+  "display": null
+}
