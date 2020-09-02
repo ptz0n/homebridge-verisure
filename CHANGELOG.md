@@ -1,3 +1,9 @@
+## 1.12.1 (Sep 2, 2020)
+
+### Plugin
+
+* Correct schema file for UI.
+
 ## 1.12.0 (Sep 1, 2020)
 
 ### Plugin
