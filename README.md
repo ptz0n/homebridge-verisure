@@ -2,7 +2,7 @@
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/ptz0n/homebridge-verisure.svg)](https://greenkeeper.io/)
 
-[![](https://travis-ci.org/ptz0n/homebridge-verisure.svg?branch=master)](https://travis-ci.org/ptz0n/homebridge-verisure)
+[![GitHub Actions badge](https://github.com/ptz0n/homebridge-verisure/workflows/Test/badge.svg)](https://github.com/ptz0n/homebridge-verisure/actions?query=workflow%3ATest)
 
 This is a plugin for [Homebridge](https://github.com/nfarina/homebridge). It's
 an implementation for your Verisure installation and exposes the following devices:

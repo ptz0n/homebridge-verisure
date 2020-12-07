@@ -2,7 +2,7 @@
 .eslintrc.js
 .gitattributes
 .gitignore
-.travis.yml
+.github
 *.test.js
 coverage
 Makefile
