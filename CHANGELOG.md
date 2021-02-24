@@ -1,3 +1,9 @@
+## 1.13.0 (Feb 24, 2021)
+
+### Dependencies
+
+* Bump `verisure` module.
+
 ## 1.12.1 (Sep 2, 2020)
 
 ### Plugin
