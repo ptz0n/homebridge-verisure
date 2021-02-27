@@ -1,3 +1,9 @@
+## 1.13.1 (Feb 27, 2021)
+
+### Plugin
+
+* Safer logging when initiating.
+
 ## 1.13.0 (Feb 24, 2021)
 
 ### Dependencies
