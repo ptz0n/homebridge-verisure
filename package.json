@@ -21,7 +21,7 @@
     "homebridge": ">=0.2.0"
   },
   "dependencies": {
-    "verisure": "^3.1.0"
+    "verisure": "^3.1.1"
   },
   "devDependencies": {
     "eslint-config-airbnb-base": "^14.0.0",

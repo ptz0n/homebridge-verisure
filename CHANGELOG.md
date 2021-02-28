@@ -1,3 +1,9 @@
+## 1.13.2 (Feb 28, 2021)
+
+### Plugin
+
+* Return empty list of accessories when initiation fails.
+
 ## 1.13.1 (Feb 27, 2021)
 
 ### Plugin
