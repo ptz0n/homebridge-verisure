@@ -65,6 +65,10 @@ your array (list) of enabled platform plugins. Example config:
 
 In 2021 Verisure started enrolling MFA, which is not yet supported by this plugin. One solution is to create a separate Verisure user without MFA enabled for Homebridge. See: [#101](https://github.com/ptz0n/homebridge-verisure/issues/101)
 
+1. Log in to MyPages with your username and password. Enter the verification code when you receive it.
+2. Go to Account and Subscription > Account > Login credentials > Disable 2-step verification
+3. Follow the instructions to disable 2-step verification.
+
 ### Environment variables
 
 For convenience, the following environment variables can be used instead of placing secrets in your `config.json`.
