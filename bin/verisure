@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+
+const prompt = require('prompt');
+
+const Verisure = require('verisure');
+
+const run = async () => {
+  prompt.start();
+  prompt.message = 'verisure';
+
+  const { email, password } = await prompt.get([
+    { name: 'email', required: true },
+    { name: 'password', required: true, hidden: true },
+  ]);
+
+  const verisure = new Verisure(email.trim(), password);
+
+  await verisure.getToken();
+
+  // TODO: What if MFA is disabled? Just output token directly.
+
+  console.log("\n", 'One-time code sent.', "\n");
+
+  const { code } = await prompt.get([
+    { name: 'code', required: true },
+  ]);
+
+  await verisure.getToken(code.trim());
+
+  console.log("\n", 'Your config is ready.', "\n");
+
+  console.log(JSON.stringify({
+    platform: 'verisure',
+    name: 'Verisure',
+    email,
+    token: verisure.getCookie('vid')
+  }, null, 2));
+};
+
+try {
+  run();
+} catch (error) {
+  console.log(error.message);
+}

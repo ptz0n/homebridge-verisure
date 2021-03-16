@@ -56,14 +56,34 @@ your array (list) of enabled platform plugins. Example config:
 ```
 
 * __`email`__ Required string containing your Verisure account email address.
-* __`password`__ Required string containing your Verisure account password.
+* __`password`__ Required string containing your Verisure account password. Not needed if you use a `token`.
+* __`token`__ Required string for accounts with MFA enabled.
 * `alarmCode` Optional string containing your security system alarm code.
 * `doorCode` Optional string containing your door lock code.
 * `pollInterval` Optional integer containing poll interval in seconds. Defaults to `60`.
 
 ### Multi-factor authentication
 
-In 2021 Verisure started enrolling MFA, which is not yet supported by this plugin. One solution is to create a separate Verisure user without MFA enabled for Homebridge. See: [#101](https://github.com/ptz0n/homebridge-verisure/issues/101)
+In 2021 Verisure started enrolling MFA which requires you to obtain a long lived token. This token is used instead of `email` and `password` in your config and will need to be renewed yearly.
+
+```bash
+npx verisure
+verisure: email:  foo@bar.com
+verisure: password:
+
+ One-time code sent.
+
+verisure: code:  FAKE12
+
+ Your config is ready.
+
+{
+  "platform" : "verisure",
+  "name" : "Verisure",
+  "email": "your@email.com",
+  "token": "vid=topSecretToken"
+}
+```
 
 1. Log in to MyPages with your username and password. Enter the verification code when you receive it.
 2. Go to Account and Subscription > Account > Login credentials > Disable 2-step verification
