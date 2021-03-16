@@ -17,15 +17,15 @@ const run = async () => {
 
   await verisure.getToken();
 
-  // TODO: What if MFA is disabled? Just output token directly.
+  if (!verisure.getCookie('vid')) {
+    console.log("\n", 'One-time code sent.', "\n");
 
-  console.log("\n", 'One-time code sent.', "\n");
+    const { code } = await prompt.get([
+      { name: 'code', required: true },
+    ]);
 
-  const { code } = await prompt.get([
-    { name: 'code', required: true },
-  ]);
-
-  await verisure.getToken(code.trim());
+    await verisure.getToken(code.trim());
+  }
 
   console.log("\n", 'Your config is ready.', "\n");
 
