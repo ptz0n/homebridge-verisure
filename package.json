@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "prompt": "^1.1.0",
-    "verisure": "git+ssh://git@github.com/ptz0n/node-verisure.git#mfa"
+    "verisure": "^4.0.0"
   },
   "devDependencies": {
     "eslint": "^6.7.2",
