@@ -48,6 +48,7 @@ your array (list) of enabled platform plugins. Example config:
     "name" : "Verisure",
     "email": "your@email.com",
     "password": "yourT0p5ecre7Passw0rd",
+    "token": "vid=topSecretToken",
     "alarmCode": "0000",
     "doorCode": "000000",
     "pollInterval": 60
