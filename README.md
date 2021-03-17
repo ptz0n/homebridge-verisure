@@ -87,10 +87,6 @@ $ npx verisure
 }
 ```
 
-1. Log in to MyPages with your username and password. Enter the verification code when you receive it.
-2. Go to Account and Subscription > Account > Login credentials > Disable 2-step verification
-3. Follow the instructions to disable 2-step verification.
-
 ### Environment variables
 
 For convenience, the following environment variables can be used instead of placing secrets in your `config.json`.

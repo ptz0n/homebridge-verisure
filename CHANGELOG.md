@@ -1,3 +1,13 @@
+## 1.14.0 (Mar 17, 2021)
+
+### Config
+
+* Support for Multi-factor authentication (MFA).
+
+### Dependencies
+
+* Bump `verisure` module.
+
 ## 1.13.2 (Feb 28, 2021)
 
 ### Plugin
