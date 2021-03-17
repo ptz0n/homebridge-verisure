@@ -1,6 +1,6 @@
 {
   "name": "homebridge-verisure",
-  "version": "1.13.2",
+  "version": "1.14.0",
   "description": "Verisure plugin for homebridge: https://github.com/nfarina/homebridge",
   "license": "MIT",
   "keywords": [
@@ -14,7 +14,7 @@
     "test": "eslint lib && jest --env=node --coverage"
   },
   "bin": {
-    "verisure": "./bin/verisure"
+    "verisure": "bin/verisure"
   },
   "bugs": {
     "url": "http://github.com/ptz0n/homebridge-verisure/issues"
