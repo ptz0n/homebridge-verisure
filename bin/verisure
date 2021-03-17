@@ -1,0 +1,54 @@
+#!/usr/bin/env node
+
+const { prompt, Password } = require('enquirer');
+
+const Verisure = require('verisure');
+
+const validate = (value) => !!value.length;
+
+const run = async () => {
+  const { email } = await prompt({
+    type: 'input',
+    name: 'email',
+    message: 'What is your login email?',
+    validate,
+  });
+
+  const password = await new Password({
+    name: 'password',
+    message: 'What is your password?',
+    validate,
+  }).run();
+
+  const verisure = new Verisure(email.trim(), password);
+
+  await verisure.getToken();
+
+  if (!verisure.getCookie('vid')) {
+    console.log("\n", 'One-time code sent.', "\n");
+
+    const { code } = await prompt({
+      type: 'input',
+      name: 'code',
+      message: 'What is your one time code?',
+      validate,
+    });
+
+    await verisure.getToken(code.trim());
+  }
+
+  console.log("\n", 'Your config is ready.', "\n");
+
+  console.log(JSON.stringify({
+    platform: 'verisure',
+    name: 'Verisure',
+    email,
+    token: verisure.getCookie('vid')
+  }, null, 2));
+};
+
+try {
+  run();
+} catch (error) {
+  console.log(error.message);
+}
