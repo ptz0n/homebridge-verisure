@@ -76,7 +76,7 @@ $ npx verisure
 
  One-time code sent.
 
-✔ What is your one time code? · FAKE12
+✔ What is your one-time code? · FAKE12
 
  Your config is ready.
 

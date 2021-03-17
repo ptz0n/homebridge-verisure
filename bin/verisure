@@ -30,7 +30,7 @@ const run = async () => {
     const { code } = await prompt({
       type: 'input',
       name: 'code',
-      message: 'What is your one time code?',
+      message: 'What is your one-time code?',
       validate,
     });
 
