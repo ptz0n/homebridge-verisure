@@ -13,7 +13,12 @@
       "password": {
         "title": "Password",
         "type": "string",
-        "required": true
+        "required": false
+      },
+      "token": {
+        "title": "Token",
+        "type": "string",
+        "required": false
       },
       "alarmCode": {
         "title": "Alarm Code",
