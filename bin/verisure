@@ -1,17 +1,24 @@
 #!/usr/bin/env node
 
-const prompt = require('prompt');
+const { prompt, Password } = require('enquirer');
 
 const Verisure = require('verisure');
 
-const run = async () => {
-  prompt.start();
-  prompt.message = 'verisure';
+const validate = (value) => !!value.length;
 
-  const { email, password } = await prompt.get([
-    { name: 'email', required: true },
-    { name: 'password', required: true, hidden: true },
-  ]);
+const run = async () => {
+  const { email } = await prompt({
+    type: 'input',
+    name: 'email',
+    message: 'What is your login email?',
+    validate,
+  });
+
+  const password = await new Password({
+    name: 'password',
+    message: 'What is your password?',
+    validate,
+  }).run();
 
   const verisure = new Verisure(email.trim(), password);
 
@@ -20,9 +27,12 @@ const run = async () => {
   if (!verisure.getCookie('vid')) {
     console.log("\n", 'One-time code sent.', "\n");
 
-    const { code } = await prompt.get([
-      { name: 'code', required: true },
-    ]);
+    const { code } = await prompt({
+      type: 'input',
+      name: 'code',
+      message: 'What is your one time code?',
+      validate,
+    });
 
     await verisure.getToken(code.trim());
   }

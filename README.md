@@ -64,23 +64,25 @@ your array (list) of enabled platform plugins. Example config:
 
 ### Multi-factor authentication
 
-In 2021 Verisure started enrolling MFA which requires you to obtain a long lived token. This token is used instead of `email` and `password` in your config and will need to be renewed yearly.
+> [Verisure] MFA is enabled for user. Please see README.
+
+In 2021 Verisure started enrolling MFA which requires you to obtain a long lived token. This token is used instead of `password` in your config and will need to be renewed yearly.
 
 ```bash
-npx verisure
-verisure: email:  foo@bar.com
-verisure: password:
+$ npx verisure
+✔ What is your login email? · foo@bar.com
+✔ What is your password? · ********************
 
  One-time code sent.
 
-verisure: code:  FAKE12
+✔ What is your one time code? · FAKE12
 
  Your config is ready.
 
 {
-  "platform" : "verisure",
-  "name" : "Verisure",
-  "email": "your@email.com",
+  "platform": "verisure",
+  "name": "Verisure",
+  "email": "foo@bar.com",
   "token": "vid=topSecretToken"
 }
 ```

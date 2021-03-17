@@ -24,7 +24,7 @@
     "homebridge": ">=0.2.0"
   },
   "dependencies": {
-    "prompt": "^1.1.0",
+    "enquirer": "^2.3.6",
     "verisure": "^4.0.0"
   },
   "devDependencies": {
