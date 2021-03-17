@@ -95,3 +95,4 @@ For convenience, the following environment variables can be used instead of plac
 * `VERISURE_DOOR_CODE`
 * `VERISURE_EMAIL`
 * `VERISURE_PASSWORD`
+* `VERISURE_TOKEN`
