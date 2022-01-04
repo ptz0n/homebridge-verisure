@@ -1,3 +1,9 @@
+## 1.14.2 (Jan 4, 2022)
+
+### Plugin
+
+* Initiate gracefully, to not affect other plugins.
+
 ## 1.14.1 (Oct 8, 2021)
 
 ### Dependencies
