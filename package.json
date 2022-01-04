@@ -11,7 +11,7 @@
     "url": "git://github.com/ptz0n/homebridge-verisure.git"
   },
   "scripts": {
-    "test": "eslint lib && jest --env=node --coverage"
+    "test": "eslint lib && jest --coverage"
   },
   "bin": {
     "verisure": "bin/verisure"
@@ -20,7 +20,7 @@
     "url": "http://github.com/ptz0n/homebridge-verisure/issues"
   },
   "engines": {
-    "node": ">=8",
+    "node": ">=12",
     "homebridge": ">=0.2.0"
   },
   "dependencies": {
@@ -33,6 +33,10 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jest": "^23.1.0",
     "hap-nodejs": "^0.7.2",
+    "homebridge": "^1.3.9",
     "jest": "^25.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
