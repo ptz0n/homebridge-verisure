@@ -51,6 +51,7 @@ your array (list) of enabled platform plugins. Example config:
     "token": "vid=topSecretToken",
     "alarmCode": "0000",
     "doorCode": "000000",
+    "installations": ["Alias"],
     "pollInterval": 60
   }
 ]
@@ -61,6 +62,7 @@ your array (list) of enabled platform plugins. Example config:
 * __`token`__ Required string for accounts with MFA enabled.
 * `alarmCode` Optional string containing your security system alarm code.
 * `doorCode` Optional string containing your door lock code.
+* `installations` Optional array for filtering installations based on Verisure alias. Defaults to `[]`
 * `pollInterval` Optional integer containing poll interval in seconds. Defaults to `60`.
 
 ### Multi-factor authentication
