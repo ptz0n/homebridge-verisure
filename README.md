@@ -69,10 +69,10 @@ your array (list) of enabled platform plugins. Example config:
 
 > [Verisure] MFA is enabled for user. Please see README.
 
-In 2021 Verisure started enrolling MFA which requires you to obtain a long lived token. This token is used instead of a `password` in your config and will need to be renewed yearly. After installing the plugin, run `npx verisure` in your terminal and copy the output values into your config.
+In 2021 Verisure started enrolling MFA which requires you to obtain a long lived token. This token is used instead of a `password` in your config and will need to be renewed yearly. After installing the plugin, run `npx homebridge-verisure` in your terminal and copy the output values into your config.
 
 ```bash
-$ npx verisure
+$ npx homebridge-verisure
 ✔ What is your login email? · foo@bar.com
 ✔ What is your password? · ********************
 

@@ -13,9 +13,7 @@
   "scripts": {
     "test": "eslint lib && jest --coverage"
   },
-  "bin": {
-    "verisure": "bin/verisure"
-  },
+  "bin": "bin/verisure",
   "bugs": {
     "url": "http://github.com/ptz0n/homebridge-verisure/issues"
   },
