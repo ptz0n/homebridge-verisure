@@ -1,3 +1,9 @@
+## 1.15.0 (Jan 11, 2022)
+
+### Plugin
+
+* Added config option for installations to initiate.
+
 ## 1.14.2 (Jan 4, 2022)
 
 ### Plugin
