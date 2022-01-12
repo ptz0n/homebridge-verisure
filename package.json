@@ -19,7 +19,7 @@
   },
   "engines": {
     "node": ">=12",
-    "homebridge": ">=0.2.0"
+    "homebridge": ">=1.0.0"
   },
   "dependencies": {
     "enquirer": "^2.3.6",
