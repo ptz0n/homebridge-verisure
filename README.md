@@ -1,6 +1,8 @@
 # homebridge-verisure
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/ptz0n/homebridge-verisure.svg)](https://greenkeeper.io/)
+[![Verified by Homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
+
+[![Synk badge](https://snyk.io/test/github/ptz0n/homebridge-verisure/badge.svg)](https://snyk.io/)
 
 [![GitHub Actions badge](https://github.com/ptz0n/homebridge-verisure/workflows/Test/badge.svg)](https://github.com/ptz0n/homebridge-verisure/actions?query=workflow%3ATest)
 
