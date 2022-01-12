@@ -24,11 +24,13 @@
       "alarmCode": {
         "title": "Alarm Code",
         "type": "string",
+        "placeholder": "0000",
         "required": false
       },
       "doorCode": {
         "title": "Door Code",
         "type": "string",
+        "placeholder": "000000",
         "required": false
       },
       "installations": {
