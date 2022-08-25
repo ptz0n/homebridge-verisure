@@ -46,9 +46,42 @@
         "type": "integer",
         "default": 60,
         "required": false
+      },
+      "showAutoLockSwitch": {
+        "title": "Show Auto-lock switch",
+        "type": "boolean",
+        "default": true
+      },
+      "showAudioSwitch": {
+        "title": "Show audio switch",
+        "type": "boolean",
+        "default": true
+      },
+      "audioOffValue": {
+        "title": "Audio off Value",
+        "type": "string",
+        "default": "SILENCE",
+        "oneOf": [
+          { "title": "Silence", "enum": ["SILENCE"] },
+          { "title": "Low", "enum": ["LOW"] }
+        ],
+        "required": true,
+        "functionBody": "return model.showAudioSwitch === true;"
+      },
+      "audioOnValue": {
+        "title": "Audio on Value",
+        "type": "string",
+        "default": "HIGH",
+        "oneOf": [
+          { "title": "Low", "enum": ["LOW"] },
+          { "title": "High", "enum": ["HIGH"] }
+        ],
+        "required": true,
+        "functionBody": "return model.showAudioSwitch === true;"
       }
     }
   },
   "form": null,
   "display": null
+ 
 }
