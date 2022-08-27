@@ -1,3 +1,9 @@
+## 1.16.0 (Aug 27, 2022)
+
+### Plugin
+
+* Added config options for door lock; auto-lock and volume.
+
 ## 1.15.0 (Jan 11, 2022)
 
 ### Plugin
