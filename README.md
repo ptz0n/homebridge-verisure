@@ -88,7 +88,11 @@ $ npx homebridge-verisure
   "platform": "verisure",
   "name": "Verisure",
   "email": "foo@bar.com",
-  "token": "vid=topSecretToken"
+  "cookies": [
+    'vid=myTopSecretToken',
+    'vs-access=myAccessToken',
+    'vs-refresh=myRefreshToken'
+  ]
 }
 ```
 

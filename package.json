@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "enquirer": "^2.3.6",
-    "verisure": "^4.1.0"
+    "verisure": "^5.0.0"
   },
   "devDependencies": {
     "eslint": "^6.7.2",
