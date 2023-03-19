@@ -70,6 +70,10 @@ your array (list) of enabled platform plugins. Example config:
 * `doorCode` Optional string containing your door lock code.
 * `installations` Optional array for filtering installations based on Verisure alias. Defaults to `[]`
 * `pollInterval` Optional integer containing poll interval in seconds. Defaults to `60`.
+* `showAutoLockSwitch` Optional boolean for exposing door lock auto lock switch. Defaults to `true`.
+* `showAudioSwitch` Optional boolean for exposing door audio volume switch. Defaults to `true`.
+* `audioOffValue` Optional string for door audio volume, `SILENCE` or `LOW`. Defaults to `SILENCE`.
+* `audioOnValue` Optional string for door audio volume, `LOW` or `HIGH`. Defaults to `LOW`.
 
 ### Multi-factor authentication
 
@@ -105,7 +109,7 @@ $ npx homebridge-verisure
 For convenience, the following environment variables can be used instead of placing secrets in your `config.json`.
 
 * `VERISURE_ALARM_CODE`
+* `VERISURE_COOKIES` - Join into a string, separated by `;`. Example: `vid=myTopSecretToken;vs-access=myAccessToken;vs-refresh=myRefreshToken`.
 * `VERISURE_DOOR_CODE`
 * `VERISURE_EMAIL`
 * `VERISURE_PASSWORD`
-* `VERISURE_COOKIES`
