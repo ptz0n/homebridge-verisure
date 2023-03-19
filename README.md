@@ -50,7 +50,11 @@ your array (list) of enabled platform plugins. Example config:
     "name" : "Verisure",
     "email": "your@email.com",
     "password": "yourT0p5ecre7Passw0rd",
-    "token": "vid=topSecretToken",
+    "cookies": [
+      "vid=myTopSecretToken",
+      "vs-access=myAccessToken",
+      "vs-refresh=myRefreshToken"
+    ],
     "alarmCode": "0000",
     "doorCode": "000000",
     "installations": ["Alias"],
@@ -89,9 +93,9 @@ $ npx homebridge-verisure
   "name": "Verisure",
   "email": "foo@bar.com",
   "cookies": [
-    'vid=myTopSecretToken',
-    'vs-access=myAccessToken',
-    'vs-refresh=myRefreshToken'
+    "vid=myTopSecretToken",
+    "vs-access=myAccessToken",
+    "vs-refresh=myRefreshToken"
   ]
 }
 ```

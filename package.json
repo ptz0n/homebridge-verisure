@@ -15,7 +15,8 @@
     "url": "https://www.paypal.com/paypalme/ptz0n"
   },
   "scripts": {
-    "test": "eslint lib && jest --coverage"
+    "test": "eslint lib && jest --coverage",
+    "start": "homebridge -P ."
   },
   "bin": "bin/verisure",
   "bugs": {
