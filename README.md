@@ -64,8 +64,8 @@ your array (list) of enabled platform plugins. Example config:
 ```
 
 * __`email`__ Required string containing your Verisure account email address.
-* __`password`__ Required string containing your Verisure account password. Not needed if you use a `token`.
-* __`token`__ Required string for accounts with MFA enabled.
+* __`password`__ Required string containing your Verisure account password. Not needed if you use `cookies`.
+* __`cookies`__ Required array of strings for accounts with MFA enabled.
 * `alarmCode` Optional string containing your security system alarm code.
 * `doorCode` Optional string containing your door lock code.
 * `installations` Optional array for filtering installations based on Verisure alias. Defaults to `[]`
@@ -75,7 +75,7 @@ your array (list) of enabled platform plugins. Example config:
 
 > [Verisure] MFA is enabled for user. Please see README.
 
-In 2021 Verisure started enrolling MFA which requires you to obtain a long lived token. This token is used instead of a `password` in your config and will need to be renewed yearly. After installing the plugin, run `npx homebridge-verisure` in your terminal and copy the output values into your config.
+In 2021 Verisure started enrolling MFA which requires you to obtain cookies. These cookies are used instead of a `password` in your config and will need to be renewed yearly. After installing the plugin, run `npx homebridge-verisure` in your terminal and copy the output values into your config.
 
 ```bash
 $ npx homebridge-verisure
@@ -108,4 +108,4 @@ For convenience, the following environment variables can be used instead of plac
 * `VERISURE_DOOR_CODE`
 * `VERISURE_EMAIL`
 * `VERISURE_PASSWORD`
-* `VERISURE_TOKEN`
+* `VERISURE_COOKIES`
