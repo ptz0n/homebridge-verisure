@@ -1,3 +1,17 @@
+## 2.0.0 (Mar 20, 2023)
+
+### Config
+
+* __BREAKING__: Property `cookies` replaces `token`. See README for how to get and configure.
+
+### Plugin & accessories
+
+* Use Verisure GraphQL API.
+
+### Dependencies
+
+* Bump `verisure` module to support GraphQL requests.
+
 ## 1.16.0 (Aug 27, 2022)
 
 ### Plugin

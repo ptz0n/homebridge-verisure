@@ -44,7 +44,7 @@ const run = async () => {
     platform: 'verisure',
     name: 'Verisure',
     email,
-    token: verisure.getCookie('vid'),
+    cookies: verisure.cookies,
   }, null, 2));
 };
 

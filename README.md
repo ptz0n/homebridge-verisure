@@ -50,7 +50,11 @@ your array (list) of enabled platform plugins. Example config:
     "name" : "Verisure",
     "email": "your@email.com",
     "password": "yourT0p5ecre7Passw0rd",
-    "token": "vid=topSecretToken",
+    "cookies": [
+      "vid=myTopSecretToken",
+      "vs-access=myAccessToken",
+      "vs-refresh=myRefreshToken"
+    ],
     "alarmCode": "0000",
     "doorCode": "000000",
     "installations": ["Alias"],
@@ -60,18 +64,22 @@ your array (list) of enabled platform plugins. Example config:
 ```
 
 * __`email`__ Required string containing your Verisure account email address.
-* __`password`__ Required string containing your Verisure account password. Not needed if you use a `token`.
-* __`token`__ Required string for accounts with MFA enabled.
+* __`password`__ Required string containing your Verisure account password. Not needed if you use `cookies`.
+* __`cookies`__ Required array of strings for accounts with MFA enabled.
 * `alarmCode` Optional string containing your security system alarm code.
 * `doorCode` Optional string containing your door lock code.
 * `installations` Optional array for filtering installations based on Verisure alias. Defaults to `[]`
 * `pollInterval` Optional integer containing poll interval in seconds. Defaults to `60`.
+* `showAutoLockSwitch` Optional boolean for exposing door lock auto lock switch. Defaults to `true`.
+* `showAudioSwitch` Optional boolean for exposing door audio volume switch. Defaults to `true`.
+* `audioOffValue` Optional string for door audio volume, `SILENCE` or `LOW`. Defaults to `SILENCE`.
+* `audioOnValue` Optional string for door audio volume, `LOW` or `HIGH`. Defaults to `LOW`.
 
 ### Multi-factor authentication
 
 > [Verisure] MFA is enabled for user. Please see README.
 
-In 2021 Verisure started enrolling MFA which requires you to obtain a long lived token. This token is used instead of a `password` in your config and will need to be renewed yearly. After installing the plugin, run `npx homebridge-verisure` in your terminal and copy the output values into your config.
+In 2021 Verisure started enrolling MFA which requires you to obtain cookies. These cookies are used instead of a `password` in your config and will need to be renewed yearly. After installing the plugin, run `npx homebridge-verisure` in your terminal and copy the output values into your config.
 
 ```bash
 $ npx homebridge-verisure
@@ -88,7 +96,11 @@ $ npx homebridge-verisure
   "platform": "verisure",
   "name": "Verisure",
   "email": "foo@bar.com",
-  "token": "vid=topSecretToken"
+  "cookies": [
+    "vid=myTopSecretToken",
+    "vs-access=myAccessToken",
+    "vs-refresh=myRefreshToken"
+  ]
 }
 ```
 
@@ -97,7 +109,7 @@ $ npx homebridge-verisure
 For convenience, the following environment variables can be used instead of placing secrets in your `config.json`.
 
 * `VERISURE_ALARM_CODE`
+* `VERISURE_COOKIES` - Join into a string, separated by `;`. Example: `vid=myTopSecretToken;vs-access=myAccessToken;vs-refresh=myRefreshToken`.
 * `VERISURE_DOOR_CODE`
 * `VERISURE_EMAIL`
 * `VERISURE_PASSWORD`
-* `VERISURE_TOKEN`
