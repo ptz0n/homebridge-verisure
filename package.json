@@ -1,6 +1,6 @@
 {
   "name": "homebridge-verisure",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Verisure plugin for homebridge: https://github.com/nfarina/homebridge",
   "license": "MIT",
   "keywords": [
@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "enquirer": "^2.3.6",
-    "verisure": "^5.1.0"
+    "verisure": "^5.1.1"
   },
   "devDependencies": {
     "eslint": "^6.7.2",

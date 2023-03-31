@@ -1,3 +1,9 @@
+## 2.0.1 (Mar 31, 2021)
+
+### Dependencies
+
+* Bump `verisure` module.
+
 ## 2.0.0 (Mar 20, 2023)
 
 ### Config
