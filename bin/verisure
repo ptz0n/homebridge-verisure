@@ -3,7 +3,7 @@
 
 const { prompt, Password } = require('enquirer');
 
-const Verisure = require('verisure');
+const Verisure = require('../lib/verisure');
 
 const validate = (value) => !!value.length;
 

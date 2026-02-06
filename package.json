@@ -27,8 +27,8 @@
     "homebridge": ">=1.0.0"
   },
   "dependencies": {
-    "enquirer": "^2.3.6",
-    "verisure": "^5.1.1"
+    "axios": "^0.24.0",
+    "enquirer": "^2.3.6"
   },
   "devDependencies": {
     "eslint": "^6.7.2",
