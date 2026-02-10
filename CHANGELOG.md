@@ -4,7 +4,7 @@
 
 * Bump `verisure` module.
 
-## 2.0.1 (Mar 31, 2021)
+## 2.0.1 (Mar 31, 2023)
 
 ### Dependencies
 
