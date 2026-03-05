@@ -82,7 +82,7 @@ your array (list) of enabled platform plugins. Example config:
 In 2021 Verisure started enrolling MFA which requires you to obtain cookies. These cookies are used instead of a `password` in your config and will need to be renewed yearly. After installing the plugin, run `npx homebridge-verisure` in your terminal and copy the output values into your config.
 
 ```bash
-$ npx homebridge-verisure
+$ npx homebridge-verisure@latest
 ✔ What is your login email? · foo@bar.com
 ✔ What is your password? · ********************
 
