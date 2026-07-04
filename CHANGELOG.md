@@ -1,3 +1,23 @@
+## 3.0.0 (May 4, 2026)
+
+### Plugin & accessories
+
+* Add support for Homebridge 2.0 alongside continued support for Homebridge 1.8+. The `engines.homebridge` range is now `^1.8.0 || ^2.0.0-beta.0` (the `-beta.0` suffix lets npm semver match the in-progress 2.0 beta releases as well as the final 2.0.0 release).
+* Migrate all accessories from the deprecated `EventEmitter`-style `.on('get', cb)` / `.on('set', cb)` characteristic handlers to the `onGet` / `onSet` async API required by HAP-NodeJS 1.x.
+* Replace `setCharacteristic` with `updateCharacteristic` when reflecting state back to HAP, to avoid re-triggering set handlers.
+* Rewrite the polling loop to call each registered getter and push the result via `updateValue`, since `Characteristic#getValue()` was removed in HAP-NodeJS 1.x.
+
+### Breaking
+
+* __BREAKING__: Node.js 18 is now the minimum supported version (was Node.js 12).
+* __BREAKING__: Homebridge 1.8 is now the minimum supported version (was 1.0).
+
+### Dependencies
+
+* Replace `hap-nodejs` dev dependency with `@homebridge/hap-nodejs ^2.0.0`. The package was renamed and bumped as part of the Homebridge 2.0 release. Test imports updated accordingly.
+* Bump `homebridge` dev dependency to `^2.0.0`.
+* Bump `eslint` to `^8.57.0`, `jest` to `^29.0.0`, and related plugins.
+
 ## 2.0.2 (Feb 10, 2026)
 
 ### Dependencies

@@ -29,6 +29,11 @@ Please protect you installation from unauthorised access:
 3. Remove access from users that no longer need it.
 4. Keep your devices up to date.
 
+## Requirements
+
+* Node.js 18 or later
+* Homebridge 1.8 or later (also compatible with Homebridge 2.0)
+
 ## Installation
 
 ```bash
