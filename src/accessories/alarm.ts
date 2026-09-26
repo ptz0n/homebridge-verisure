@@ -16,6 +16,13 @@ export class Alarm extends VerisureAccessoryHandler {
 
   private readonly forceArm: boolean;
 
+  /** Verisure reports transitional statuses (e.g. `CHANGE_IN_PROGRESS`
+   * while an arm/disarm is mid-flight) that have no HomeKit equivalent.
+   * Falling back to the last resolved state avoids surfacing a read error
+   * for what is a normal, brief condition, and is more robust than
+   * enumerating every transitional status Verisure might ever send. */
+  private lastKnownState?: number;
+
   constructor(platform: VerisurePlatform, accessory: PlatformAccessory<AccessoryContext>, installation: VerisureInstallation) {
     super(platform, accessory, installation);
 
@@ -63,6 +70,21 @@ export class Alarm extends VerisureAccessoryHandler {
     return value;
   }
 
+  /** Resolves the current HomeKit state for a Verisure status, remembering
+   * it for next time. Falls back to the last known state - rather than
+   * erroring - for a transitional or otherwise unrecognized status. */
+  private resolveCurrentState(statusType: string): number {
+    try {
+      this.lastKnownState = this.toHomeKitState(statusType);
+    } catch (error) {
+      if (this.lastKnownState === undefined) {
+        throw error;
+      }
+      this.logPrefixed(`${(error as Error).message} - reporting the last known state instead.`, 'debug');
+    }
+    return this.lastKnownState;
+  }
+
   private toVerisureState(value: CharacteristicValue): TargetArmState {
     const map = this.armStateMap();
     const match = (Object.keys(map) as TargetArmState[]).find((key) => map[key] === value);
@@ -75,9 +97,16 @@ export class Alarm extends VerisureAccessoryHandler {
   private async getCurrentAlarmState(): Promise<CharacteristicValue> {
     const overview = await this.platform.poller(this.installation).getOverview();
     if (!overview.armState) {
+      if (this.lastKnownState !== undefined) {
+        return this.lastKnownState;
+      }
       throw new this.hap.HapStatusError(this.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE);
     }
-    return this.toHomeKitState(overview.armState.statusType);
+    try {
+      return this.resolveCurrentState(overview.armState.statusType);
+    } catch {
+      throw new this.hap.HapStatusError(this.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE);
+    }
   }
 
   private async setTargetAlarmState(value: CharacteristicValue): Promise<void> {
@@ -93,6 +122,7 @@ export class Alarm extends VerisureAccessoryHandler {
     const { transactionId } = await this.installation.client<{ transactionId: string }>(operation);
     await this.resolveChangeResult(pollArmStateOperation(transactionId, targetArmState));
 
+    this.lastKnownState = value as number;
     setImmediate(() => {
       this.service.updateCharacteristic(this.hap.Characteristic.SecuritySystemCurrentState, value);
     });
@@ -104,7 +134,7 @@ export class Alarm extends VerisureAccessoryHandler {
       return;
     }
     try {
-      const value = this.toHomeKitState((armState as ArmState).statusType);
+      const value = this.resolveCurrentState((armState as ArmState).statusType);
       this.service.updateCharacteristic(this.hap.Characteristic.SecuritySystemCurrentState, value);
     } catch (error) {
       this.logPrefixed((error as Error).message, 'debug');

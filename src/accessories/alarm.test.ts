@@ -92,4 +92,34 @@ describe('Alarm', () => {
 
     expect(service.getCharacteristic(SecuritySystemCurrentState).value).toBe(SecuritySystemCurrentState.STAY_ARM);
   });
+
+  it('falls back to the last known state for a transitional status like CHANGE_IN_PROGRESS - regression test for a live crash', async () => {
+    const client = jest.fn().mockResolvedValue({ installation: { armState: { statusType: 'CHANGE_IN_PROGRESS' } } });
+    const installation = makeInstallation(client);
+    const accessory = makeAccessory(undefined, 'Alarm - Kungsgatan');
+    const alarm = new Alarm(platform, accessory, installation);
+    const service = accessory.getService(hap.Service.SecuritySystem)!;
+
+    // Establish a known state first, via a poll tick.
+    alarm.paint({ armState: { statusType: 'DISARMED' } });
+    expect(service.getCharacteristic(SecuritySystemCurrentState).value).toBe(SecuritySystemCurrentState.DISARMED);
+
+    // A read landing mid-transition must not error or clobber that state.
+    const value = await service.getCharacteristic(SecuritySystemCurrentState).handleGetRequest();
+    expect(value).toBe(SecuritySystemCurrentState.DISARMED);
+
+    // Nor should a poll tick landing mid-transition.
+    alarm.paint({ armState: { statusType: 'CHANGE_IN_PROGRESS' } });
+    expect(service.getCharacteristic(SecuritySystemCurrentState).value).toBe(SecuritySystemCurrentState.DISARMED);
+  });
+
+  it('reports a communication failure for an unrecognized status with no prior known state', async () => {
+    const client = jest.fn().mockResolvedValue({ installation: { armState: { statusType: 'CHANGE_IN_PROGRESS' } } });
+    const installation = makeInstallation(client);
+    const accessory = makeAccessory(undefined, 'Alarm - Kungsgatan');
+    new Alarm(platform, accessory, installation);
+    const service = accessory.getService(hap.Service.SecuritySystem)!;
+
+    await expect(service.getCharacteristic(SecuritySystemCurrentState).handleGetRequest()).rejects.toBeDefined();
+  });
 });
