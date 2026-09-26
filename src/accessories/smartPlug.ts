@@ -53,6 +53,7 @@ export class SmartPlug extends VerisureAccessoryHandler {
     this.logPrefixed(`Setting switch state to: ${value}`);
     try {
       await this.installation.client(smartPlugStateOperation(this.serialNumber as string, value as boolean));
+      this.platform.poller(this.installation).invalidate();
     } catch (error) {
       this.logPrefixed(`Error setting switch state: ${(error as Error).message}`, 'debug');
       throw error;

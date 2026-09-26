@@ -41,6 +41,34 @@ describe('Alarm', () => {
     expect(service.getCharacteristic(SecuritySystemCurrentState).value).toBe(SecuritySystemCurrentState.AWAY_ARM);
   });
 
+  it('does not let a stale cached overview undo the confirmation read after disarming - regression test for the Home app spinner never clearing', async () => {
+    const client = jest.fn();
+    const installation = makeInstallation(client);
+    const accessory = makeAccessory(undefined, 'Alarm - Kungsgatan');
+    new Alarm(platform, accessory, installation);
+    const service = accessory.getService(hap.Service.SecuritySystem)!;
+
+    // Prime the overview cache with the still-armed state, as would happen
+    // from a read shortly before the disarm request comes in.
+    client.mockResolvedValueOnce({ installation: { armState: { statusType: 'ARMED_AWAY' } } });
+    await service.getCharacteristic(SecuritySystemCurrentState).handleGetRequest();
+
+    client
+      .mockResolvedValueOnce({ transactionId: 'asd123' })
+      .mockResolvedValueOnce({ installation: { pollResult: { result: 'OK' } } })
+      // What a fresh fetch after invalidation should see.
+      .mockResolvedValueOnce({ installation: { armState: { statusType: 'DISARMED' } } });
+    await service.getCharacteristic(SecuritySystemTargetState).handleSetRequest(SecuritySystemCurrentState.DISARMED);
+
+    // The Home app re-reads CurrentState right after a set, to confirm the
+    // change actually took, before it'll clear its "Disarming..." spinner.
+    // Without cache invalidation this would still return the primed,
+    // now-stale ARMED_AWAY (and never make a further client() call).
+    const value = await service.getCharacteristic(SecuritySystemCurrentState).handleGetRequest();
+    expect(value).toBe(SecuritySystemCurrentState.DISARMED);
+    expect(client).toHaveBeenCalledTimes(4);
+  });
+
   it('passes forceArm: false through when configured', async () => {
     const client = jest.fn()
       .mockResolvedValueOnce({ transactionId: 'asd123' })

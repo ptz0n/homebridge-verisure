@@ -72,6 +72,33 @@ describe('DoorLock', () => {
     ).toBe(LockTargetState.SECURED);
   });
 
+  it('does not let a stale cached overview undo the confirmation read after unlocking - regression test for the Home app spinner never clearing', async () => {
+    const client = jest.fn();
+    const installation = makeInstallation(client);
+    const accessory = makeAccessory('1234');
+    new DoorLock(platform, accessory, installation);
+    const lockService = accessory.getService(hap.Service.LockMechanism)!;
+
+    // Prime the overview cache with the still-locked state.
+    client.mockResolvedValueOnce({
+      installation: { doorlocks: [{ device: { deviceLabel: '1234' }, currentLockState: 'LOCKED' }] },
+    });
+    await lockService.getCharacteristic(LockCurrentState).handleGetRequest();
+
+    client
+      .mockResolvedValueOnce({ transactionId: 'asd123' })
+      .mockResolvedValueOnce({ installation: { pollResult: { result: 'OK' } } })
+      // What a fresh fetch after invalidation should see.
+      .mockResolvedValueOnce({
+        installation: { doorlocks: [{ device: { deviceLabel: '1234' }, currentLockState: 'UNLOCKED' }] },
+      });
+    await lockService.getCharacteristic(LockTargetState).handleSetRequest(LockTargetState.UNSECURED);
+
+    const value = await lockService.getCharacteristic(LockCurrentState).handleGetRequest();
+    expect(value).toBe(LockCurrentState.UNSECURED);
+    expect(client).toHaveBeenCalledTimes(4);
+  });
+
   it('treats "already at target state" as success, not an error', async () => {
     const client = jest.fn().mockRejectedValue({ errors: [{ data: { errorCode: 'VAL_00819' } }] });
     const installation = makeInstallation(client);

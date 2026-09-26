@@ -83,6 +83,17 @@ export class OverviewPoller {
     return this.fetch();
   }
 
+  /** Discards the cached overview. Call this right after a mutation (arm,
+   * lock, plug toggle) succeeds: HomeKit controllers commonly re-read a
+   * characteristic right after writing it to confirm the change actually
+   * took, and without this a stale cached overview from just before the
+   * mutation would answer that read - undoing the fresh value the mutation
+   * just pushed, and leaving e.g. the Home app's "Disarming..." spinner
+   * stuck since current would appear to disagree with target again. */
+  invalidate(): void {
+    this.cache = undefined;
+  }
+
   private async tick(): Promise<void> {
     if (Date.now() < this.rateLimitedUntil) {
       return;

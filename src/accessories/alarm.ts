@@ -123,6 +123,9 @@ export class Alarm extends VerisureAccessoryHandler {
     await this.resolveChangeResult(pollArmStateOperation(transactionId, targetArmState));
 
     this.lastKnownState = value as number;
+    // A stale cached overview from just before this change must not answer
+    // the read HomeKit does right after to confirm it (see OverviewPoller#invalidate).
+    this.platform.poller(this.installation).invalidate();
     setImmediate(() => {
       this.service.updateCharacteristic(this.hap.Characteristic.SecuritySystemCurrentState, value);
     });

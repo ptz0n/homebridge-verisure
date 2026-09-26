@@ -2,6 +2,7 @@ import type { CharacteristicValue, PlatformAccessory, Service } from 'homebridge
 import type { VerisureInstallation } from 'verisure';
 
 import { memoizeAsync } from '../cache';
+import type { Memoized } from '../cache';
 import {
   doorLockConfigOperation,
   doorLockOperation,
@@ -33,7 +34,7 @@ export class DoorLock extends VerisureAccessoryHandler {
    * burned through the daily API quota in issues #159, #173, #181, #168. */
   private pendingTargetState?: LockState;
 
-  private readonly getLockConfig: () => Promise<SmartLockConfigEntry>;
+  private readonly getLockConfig: Memoized<SmartLockConfigEntry>;
 
   constructor(
     platform: VerisurePlatform,
@@ -134,6 +135,9 @@ export class DoorLock extends VerisureAccessoryHandler {
       this.pendingTargetState = undefined;
     }
 
+    // A stale cached overview from just before this change must not answer
+    // the read HomeKit does right after to confirm it (see OverviewPoller#invalidate).
+    this.platform.poller(this.installation).invalidate();
     setImmediate(() => {
       this.lockService.updateCharacteristic(LockCurrentState, value);
     });
@@ -153,6 +157,7 @@ export class DoorLock extends VerisureAccessoryHandler {
     this.logPrefixed(`Setting auto lock to: ${value}`);
     try {
       await this.installation.client(doorLockUpdateConfigOperation(this.serialNumber as string, { autoLockEnabled: value }));
+      this.getLockConfig.invalidate();
     } catch (error) {
       this.logPrefixed((error as Error).message, 'debug');
       throw error;
@@ -174,6 +179,7 @@ export class DoorLock extends VerisureAccessoryHandler {
     this.logPrefixed(`Setting audio volume to: ${volume}`);
     try {
       await this.installation.client(doorLockUpdateConfigOperation(this.serialNumber as string, { volume }));
+      this.getLockConfig.invalidate();
     } catch (error) {
       this.logPrefixed((error as Error).message, 'debug');
       throw error;
