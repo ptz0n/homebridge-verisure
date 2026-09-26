@@ -95,15 +95,19 @@ export class Alarm extends VerisureAccessoryHandler {
   }
 
   private async getCurrentAlarmState(): Promise<CharacteristicValue> {
+    this.logPrefixed('Getting current alarm state.', 'debug');
     const overview = await this.platform.poller(this.installation).getOverview();
     if (!overview.armState) {
+      this.logPrefixed(`No armState in overview; last known state: ${this.lastKnownState}`, 'debug');
       if (this.lastKnownState !== undefined) {
         return this.lastKnownState;
       }
       throw new this.hap.HapStatusError(this.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE);
     }
     try {
-      return this.resolveCurrentState(overview.armState.statusType);
+      const value = this.resolveCurrentState(overview.armState.statusType);
+      this.logPrefixed(`Resolved current alarm state: ${value} (raw Verisure status: ${overview.armState.statusType})`, 'debug');
+      return value;
     } catch {
       throw new this.hap.HapStatusError(this.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE);
     }
