@@ -81,6 +81,36 @@
         ],
         "required": true,
         "functionBody": "return model.showAudioSwitch === true;"
+      },
+      "forceArm": {
+        "title": "Force arm",
+        "description": "Arm even if a door/window sensor is open. Turning this off can cause arming to silently fail if a sensor isn't in its expected state.",
+        "type": "boolean",
+        "default": true
+      },
+      "excludedAccessoryTypes": {
+        "title": "Excluded accessory types",
+        "type": "array",
+        "items": {
+          "type": "string",
+          "oneOf": [
+            { "title": "Alarm", "enum": ["alarm"] },
+            { "title": "Climate sensor", "enum": ["climateSensor"] },
+            { "title": "Contact sensor", "enum": ["contactSensor"] },
+            { "title": "Door lock", "enum": ["doorLock"] },
+            { "title": "Smart plug", "enum": ["smartPlug"] }
+          ]
+        },
+        "required": false
+      },
+      "excludedDevices": {
+        "title": "Excluded devices",
+        "description": "Device labels or area names to never expose, regardless of type.",
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "required": false
       }
     }
   },

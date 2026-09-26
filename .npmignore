@@ -3,8 +3,8 @@
 .gitattributes
 .gitignore
 .github
-*.test.js
+src
 coverage
 Makefile
-test
-yarn.lock
+tsconfig.json
+*.test.ts

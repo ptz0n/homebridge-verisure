@@ -6,7 +6,7 @@
 
 [![GitHub Actions badge](https://github.com/ptz0n/homebridge-verisure/workflows/Test/badge.svg)](https://github.com/ptz0n/homebridge-verisure/actions?query=workflow%3ATest)
 
-This is a plugin for [Homebridge](https://github.com/nfarina/homebridge). It's
+This is a plugin for [Homebridge](https://homebridge.io). It's
 an implementation for your Verisure installation and exposes the following devices:
 
 - Security alarm
@@ -18,6 +18,11 @@ an implementation for your Verisure installation and exposes the following devic
 - SmartPlug
 - Smoke detector
 - Vibration detector
+
+## Requirements
+
+* Node.js 22 or later
+* Homebridge 2.0 or later
 
 ## Protect linked devices & accounts
 
@@ -74,6 +79,18 @@ your array (list) of enabled platform plugins. Example config:
 * `showAudioSwitch` Optional boolean for exposing door audio volume switch. Defaults to `true`.
 * `audioOffValue` Optional string for door audio volume, `SILENCE` or `LOW`. Defaults to `SILENCE`.
 * `audioOnValue` Optional string for door audio volume, `LOW` or `HIGH`. Defaults to `LOW`.
+* `forceArm` Optional boolean. Bypasses Verisure's "a door/window is open" guard when arming. Defaults to `true` - without it, arming can silently fail depending on sensor state.
+* `excludedAccessoryTypes` Optional array to hide entire accessory types: `alarm`, `climateSensor`, `contactSensor`, `doorLock`, `smartPlug`.
+* `excludedDevices` Optional array of device labels or area names (e.g. `"Kitchen"`) to hide regardless of type.
+
+### Rate limits
+
+Verisure limits how many API calls an account can make per day; exceeding it
+gets your account temporarily blocked. This plugin makes one request per
+installation per `pollInterval` tick, shared by every accessory on it, plus a
+short-lived cache that collapses bursts of near-simultaneous HomeKit reads.
+If Verisure does rate-limit the account anyway, polling for that installation
+pauses automatically for 15 minutes.
 
 ### Multi-factor authentication
 
@@ -113,3 +130,17 @@ For convenience, the following environment variables can be used instead of plac
 * `VERISURE_DOOR_CODE`
 * `VERISURE_EMAIL`
 * `VERISURE_PASSWORD`
+
+## Known limitations
+
+* Verisure's alarm system has no equivalent of HomeKit's "Night" state; a client that lets you pick it anyway (e.g. Eve) will have the request rejected.
+* Climate sensor readings update roughly every 6 hours on Verisure's side; HomeKit will show that same stale-looking value in between.
+
+## Development
+
+```bash
+npm install
+npm run build   # compile TypeScript to dist/
+npm test        # lint, build, and run the test suite
+npm start       # build and launch a local Homebridge instance for manual testing
+```
