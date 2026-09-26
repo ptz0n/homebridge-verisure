@@ -49,9 +49,11 @@ export interface Climate {
   device: Device;
   humidityEnabled?: boolean;
   humidityTimestamp?: string;
-  humidityValue?: number;
+  /** `null` when this device doesn't support the reading, not just absent -
+   * e.g. VoiceBox devices report `humidityValue: null`. */
+  humidityValue?: number | null;
   temperatureTimestamp?: string;
-  temperatureValue?: number;
+  temperatureValue?: number | null;
 }
 
 export interface DoorWindow {

@@ -38,6 +38,23 @@ describe('ClimateSensor', () => {
     expect(accessory.getService(hap.Service.HumiditySensor)).toBeUndefined();
   });
 
+  it('does not expose a humidity service when Verisure reports it as null (e.g. VoiceBox devices) - regression test for a live crash', () => {
+    const installation = makeInstallation(jest.fn());
+    const accessory = makeAccessory('vb1', 'Röstenhet - Trapp');
+    const voiceBox: Climate = {
+      device: { deviceLabel: 'vb1', area: 'Trapp', gui: { label: 'VOICEBOX' } },
+      temperatureValue: 21,
+      humidityValue: null,
+    };
+    const sensor = new ClimateSensor(platform, accessory, installation, voiceBox);
+
+    expect(accessory.getService(hap.Service.HumiditySensor)).toBeUndefined();
+
+    // A poll tick reporting the same null must not try to push it into a
+    // (non-existent) humidity characteristic either.
+    expect(() => sensor.paint({ climates: [voiceBox] })).not.toThrow();
+  });
+
   it('gets the current temperature from the overview', async () => {
     const client = jest.fn().mockResolvedValue({ installation: { climates: [{ ...climate, temperatureValue: 22.5 }] } });
     const installation = makeInstallation(client);

@@ -6,6 +6,8 @@ import type { Climate, Overview } from '../types';
 import { VerisureAccessoryHandler } from './base';
 import type { AccessoryContext } from './base';
 
+const isNumber = (value: unknown): value is number => typeof value === 'number';
+
 export class ClimateSensor extends VerisureAccessoryHandler {
   private temperatureService?: Service;
 
@@ -24,7 +26,11 @@ export class ClimateSensor extends VerisureAccessoryHandler {
     const { Characteristic, Service } = this.hap;
     this.accessoryInformation.setCharacteristic(Characteristic.Model, label);
 
-    if (initial.temperatureValue !== undefined) {
+    // Verisure reports an unsupported reading as an explicit `null`, not a
+    // missing field - e.g. VoiceBox devices have a `humidityValue: null`.
+    // Checking only `!== undefined` let `null` through, which HomeKit
+    // rejects outright for these characteristics.
+    if (isNumber(initial.temperatureValue)) {
       this.temperatureService = this.accessory.getService(Service.TemperatureSensor)
         ?? this.accessory.addService(Service.TemperatureSensor, accessory.displayName);
       this.temperatureService.getCharacteristic(Characteristic.CurrentTemperature)
@@ -32,7 +38,7 @@ export class ClimateSensor extends VerisureAccessoryHandler {
         .onGet(() => this.getCurrentValue('temperatureValue'));
     }
 
-    if (initial.humidityValue !== undefined) {
+    if (isNumber(initial.humidityValue)) {
       this.humidityService = this.accessory.getService(Service.HumiditySensor)
         ?? this.accessory.addService(Service.HumiditySensor, accessory.displayName);
       this.humidityService.getCharacteristic(Characteristic.CurrentRelativeHumidity)
@@ -49,7 +55,7 @@ export class ClimateSensor extends VerisureAccessoryHandler {
     const overview = await this.platform.poller(this.installation).getOverview();
     const device = this.findDevice(overview);
     const value = device?.[property];
-    if (value === undefined) {
+    if (!isNumber(value)) {
       throw new this.hap.HapStatusError(this.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE);
     }
     return value;
@@ -61,10 +67,10 @@ export class ClimateSensor extends VerisureAccessoryHandler {
       return;
     }
     const { Characteristic } = this.hap;
-    if (this.temperatureService && device.temperatureValue !== undefined) {
+    if (this.temperatureService && isNumber(device.temperatureValue)) {
       this.temperatureService.updateCharacteristic(Characteristic.CurrentTemperature, device.temperatureValue);
     }
-    if (this.humidityService && device.humidityValue !== undefined) {
+    if (this.humidityService && isNumber(device.humidityValue)) {
       this.humidityService.updateCharacteristic(Characteristic.CurrentRelativeHumidity, device.humidityValue);
     }
   }
