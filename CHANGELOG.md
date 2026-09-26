@@ -25,7 +25,7 @@
 
 * Bump `homebridge` dev dependency to `^2.0.0` and `@homebridge/hap-nodejs` to `^2.2.3`.
 * Switch tooling to TypeScript, `ts-jest`, and `@typescript-eslint`.
-* The companion [`verisure`](https://github.com/ptz0n/node-verisure) transport module has also been modernized on its own branch (native `fetch` instead of `axios`, Node 18+, rate-limit detection) - see its own changelog once released.
+* Bump the `verisure` transport module to `^6.0.0`, which drops `axios` for native `fetch` and adds rate-limit detection - see [its own changelog](https://github.com/ptz0n/node-verisure/blob/master/CHANGELOG.md).
 
 ## 2.0.2 (Feb 10, 2026)
 

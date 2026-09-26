@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "enquirer": "^2.3.6",
-    "verisure": "^5.1.2"
+    "verisure": "^6.0.0"
   },
   "overrides": {
     "@homebridge/hap-nodejs": "$@homebridge/hap-nodejs"
